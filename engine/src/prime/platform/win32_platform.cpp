@@ -29,8 +29,6 @@ namespace prime {
 		if (fullScreen) { glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE); }
 		m_windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 		glfwSetWindowUserPointer((GLFWwindow*)m_windowHandle, &m_data);
-
-		glfwMakeContextCurrent((GLFWwindow*)m_windowHandle);
 	}
 
 	void Platform::Shutdown()
@@ -40,14 +38,9 @@ namespace prime {
 		glfwTerminate();
 	}
 
-	void Platform::PollEvents()
+	void Platform::Update()
 	{
 		glfwPollEvents();
-	}
-
-	void Platform::SwapBuffers()
-	{
-		glfwSwapBuffers((GLFWwindow*)m_windowHandle);
 	}
 }
 

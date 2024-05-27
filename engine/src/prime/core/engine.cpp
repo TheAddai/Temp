@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "engine.h"
 #include "logger.h"
+#include "prime/renderer/renderer.h"
 
 namespace prime {
 
@@ -16,6 +17,8 @@ namespace prime {
 
 		Game::Config gameConfig = game->GetConfig();
 		s_platform.Init(gameConfig.title, gameConfig.width, gameConfig.height, gameConfig.fullScreen);
+		Renderer::s_API = gameConfig.API;
+		Renderer::Init(s_platform.GetWindowHandle());
 
 		game->Init();
 		s_running = true;
@@ -23,13 +26,14 @@ namespace prime {
 		// update
 		while (s_running)
 		{
-			s_platform.PollEvents();
+			s_platform.Update();
 			game->Update();
-			s_platform.SwapBuffers();
+			Renderer::SwapBuffers();
 		}
 
 		// shutdown
 		game->Shutdown();
+		Renderer::Shutdown();
 		s_platform.Shutdown();
 		Logger::Shutdown();
 	}

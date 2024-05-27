@@ -40,4 +40,5 @@ workspace "Prime"
 
     group "vendor"
         include "vendor/glfw/glfw.lua"
+        include "vendor/glad/glad.lua"
     group ""

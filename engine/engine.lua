@@ -29,10 +29,12 @@ project "engine"
     externalincludedirs
     {
         "%{includeDirs.spdlog}",
-        "%{includeDirs.glfw}"
+        "%{includeDirs.glfw}",
+        "%{includeDirs.glad}"
     }
 
     links
     {
-        "glfw"
+        "glfw",
+        "glad"
     }

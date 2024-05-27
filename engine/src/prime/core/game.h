@@ -1,6 +1,7 @@
 #pragma once
 
 #include "defines.h"
+#include "prime/renderer/renderer.h"
 
 #include <string>
 
@@ -14,6 +15,7 @@ namespace prime {
 			ui32 width = 640, height = 480;
 			bool fullScreen = false, vSync = true;
 			std::string title = "Prime Game";
+			Renderer::API API = Renderer::API::openGL;
 		};
 
 		virtual void Init() = 0;

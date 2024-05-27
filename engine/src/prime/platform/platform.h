@@ -19,8 +19,7 @@ namespace prime {
 		void Init(const std::string& title, ui32 width, ui32 height, b8 fullScreen);
 		void Shutdown();
 
-		void PollEvents();
-		void SwapBuffers();
+		void Update();
 
 		void* GetWindowHandle() const { return m_windowHandle; }
 		ui32 GetWidth() const { return m_data.width; }
