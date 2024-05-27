@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace prime {
 
 	class Window;
@@ -11,7 +13,7 @@ namespace prime {
 			openGL
 		};
 
-		static void SetClearColor();
+		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 
 		static API GetAPI() { return s_API; }

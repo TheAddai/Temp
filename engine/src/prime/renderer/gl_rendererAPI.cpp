@@ -25,9 +25,9 @@ namespace prime {
 
 	}
 
-	void GLRendererAPI::SetClearColor()
+	void GLRendererAPI::SetClearColor(const glm::vec4& color)
 	{
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
 	void GLRendererAPI::Clear()

@@ -21,7 +21,8 @@ project "editor"
 
     externalincludedirs
     {
-        "%{includeDirs.spdlog}"
+        "%{includeDirs.spdlog}",
+        "%{wks.location}/vendor/glm/include"
     }
 
     links
