@@ -37,6 +37,8 @@ namespace prime {
 
 	void Editor::Update()
 	{
+		ResizeViewport();
+
 		m_frameBuffer->Bind();
 		m_scene->Draw();
 		m_frameBuffer->Unbind();
@@ -101,5 +103,18 @@ namespace prime {
 
 		ImGui::End();
 		ImGui::PopStyleVar();
+	}
+	
+	void Editor::ResizeViewport()
+	{
+		glm::vec2 size = glm::vec2(0.0f);
+		size.x = (f32)m_frameBuffer->GetWidth();
+		size.y = (f32)m_frameBuffer->GetHeight();
+
+		if (m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
+			(size.x != m_viewportSize.x || size.y != m_viewportSize.y))
+		{
+			m_frameBuffer->Resize((ui32)m_viewportSize.x, (ui32)m_viewportSize.y);
+		}
 	}
 }

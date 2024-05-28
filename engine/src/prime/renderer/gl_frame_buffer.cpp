@@ -26,25 +26,24 @@ namespace prime {
 	{
 		m_width = width;
 		m_height = height;
+
 		if (m_handle)
 		{
 			glDeleteRenderbuffers(1, &m_renderBuffer);
 			glDeleteFramebuffers(1, &m_handle);
+			glDeleteTextures(1, &m_texture);
 
 			m_texture = 0;
-			m_handle = 0;
 			m_renderBuffer = 0;
-			Generate();
+			m_handle = 0;
 		}
-		else
-		{
-			Generate();
-		}
+		Generate();
 	}
 
 	void GLFramebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_handle);
+		glViewport(0, 0, m_width, m_height);
 	}
 
 	void GLFramebuffer::Unbind()

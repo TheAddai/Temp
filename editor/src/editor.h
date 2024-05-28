@@ -27,6 +27,8 @@ namespace prime {
 		void Dockspace();
 		void Viewport();
 
+		void ResizeViewport();
+
 	private:
 		Ref<Scene> m_scene;
 		Ref<Framebuffer> m_frameBuffer;
