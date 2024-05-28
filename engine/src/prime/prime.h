@@ -6,4 +6,7 @@
 #include "core/engine.h"
 #include "core/game.h"
 #include "core/logger.h"
-#include "core/platform_detection.h"
+
+// platform
+#include "platform/platform_detection.h"
+#include "platform/platform.h"

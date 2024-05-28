@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform_detection.h"
+#include "prime/platform/platform_detection.h"
 
 #include <spdlog/spdlog.h>
 

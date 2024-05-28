@@ -21,7 +21,18 @@ project "engine"
         "src",
     }
 
+    defines
+    {
+        "GLFW_INCLUDE_NONE"
+    }
+
     externalincludedirs
     {
-        "%{includeDirs.spdlog}"
+        "%{includeDirs.spdlog}",
+        "%{includeDirs.glfw}"
+    }
+
+    links
+    {
+        "glfw"
     }
