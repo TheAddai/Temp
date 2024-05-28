@@ -3,9 +3,9 @@
 #include "platform_detection.h"
 #include "platform.h"
 #include "prime/core/assert.h"
+#include "prime/core/events.h"
 
 #ifdef P_WINDOWS
-
 #include <GLFW/glfw3.h>
 
 namespace prime {

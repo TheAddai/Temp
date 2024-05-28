@@ -3,6 +3,7 @@
 #include "engine.h"
 #include "logger.h"
 #include "prime/renderer/renderer.h"
+#include "prime/core/events.h"
 
 namespace prime {
 

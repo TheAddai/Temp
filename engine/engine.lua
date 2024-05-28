@@ -31,7 +31,8 @@ project "engine"
         "%{includeDirs.spdlog}",
         "%{includeDirs.glfw}",
         "%{includeDirs.glad}",
-        "%{wks.location}/vendor/glm/include"
+        "%{includeDirs.glm}",
+        "%{includeDirs.entt}"
     }
 
     links
