@@ -18,5 +18,8 @@ namespace prime {
 
 			return config;
 		}
+
+	private:
+		Ref<Scene> m_scene;
 	};
 }

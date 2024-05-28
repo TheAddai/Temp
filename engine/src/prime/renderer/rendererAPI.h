@@ -22,6 +22,6 @@ namespace prime {
 		virtual void EndDrawing() = 0;
 		virtual void SetViewport(ui32 width, ui32 height) = 0;
 
-		virtual void DrawQuad(const glm::vec2& position, const glm::vec2& scale) = 0;
+		virtual void DrawQuad(const glm::vec2& position, const glm::vec2& scale, f32 rotation) = 0;
 	};
 }

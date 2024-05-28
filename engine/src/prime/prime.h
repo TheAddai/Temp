@@ -10,6 +10,7 @@
 #include "core/game.h"
 #include "core/key.h"
 #include "core/logger.h"
+#include "core/ref.h"
 
 // platform
 #include "platform/platform_detection.h"
@@ -19,5 +20,6 @@
 #include "renderer/renderer.h"
 
 // scene
+#include "scene/components.h"
 #include "scene/entity.h"
 #include "scene/scene.h"

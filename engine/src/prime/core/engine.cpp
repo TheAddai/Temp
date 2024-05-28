@@ -35,7 +35,6 @@ namespace prime {
 		s_platform.Init(gameConfig.title, gameConfig.width, gameConfig.height, gameConfig.fullScreen);
 		Renderer::s_API = gameConfig.API;
 		Renderer::Init(s_platform.GetWindowHandle());
-		Renderer::SetClearColor({0.2f, 0.2f, 0.2f, 1.0f});
 
 		game->Init();
 		s_running = true;
@@ -50,7 +49,6 @@ namespace prime {
 			s_platform.Update();
 			Dispatcher::Get().update();
 
-			Renderer::Clear();
 			game->Update();
 			Renderer::SwapBuffers();
 		}

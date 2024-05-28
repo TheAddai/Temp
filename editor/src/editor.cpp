@@ -5,7 +5,14 @@ namespace prime {
 
 	void Editor::Init()
 	{
+		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+		m_scene = Scene::Create();
 
+		Entity entity = m_scene->CreateEntity();
+		entity.GetComponent<TransformComponent>().scale.x = 0.2f;
+		entity.GetComponent<TransformComponent>().scale.y = 0.2f;
+		entity.GetComponent<TransformComponent>().position.x = -.4f;
+		entity.AddComponent<SpriteComponent>();
 	}
 
 	void Editor::Shutdown()
@@ -15,8 +22,6 @@ namespace prime {
 
 	void Editor::Update()
 	{
-		Renderer::BeginDrawing();
-		Renderer::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f } );
-		Renderer::EndDrawing();
+		m_scene->Draw();
 	}
 }

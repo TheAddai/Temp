@@ -151,7 +151,7 @@ namespace prime {
 		glViewport(0, 0, width, height);
 	}
 
-	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale)
+	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale, f32 rotation)
 	{
 		if (s_data.spriteIndexCount >= s_data.maxIndices)
 		{
@@ -159,7 +159,7 @@ namespace prime {
 			StartBatch();
 		}
 
-		glm::mat4 transform = GetTransform(position, scale, 0);
+		glm::mat4 transform = GetTransform(position, scale, rotation);
 		for (auto i = 0; i < 4; i++)
 		{
 			s_data.spriteVertexBufferPtr->position = transform * s_data.vertexPositions[i];

@@ -22,7 +22,7 @@ namespace prime {
 		void EndDrawing() override;
 		void SetViewport(ui32 width, ui32 height) override;
 
-		void DrawQuad(const glm::vec2& position, const glm::vec2& scale) override;
+		void DrawQuad(const glm::vec2& position, const glm::vec2& scale, f32 rotation) override;
 
 	private:
 		void InitSpriteRendering();

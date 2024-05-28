@@ -1,19 +1,28 @@
 #pragma once
 
+#include "prime/core/ref.h"
+
 #include <entt/entt.hpp>
-#include <memory>
 
 namespace prime {
 
+	class Entity;
 	class Scene
 	{
 	public:
 		Scene() = default;
 		~Scene();
 
-		static std::shared_ptr<Scene> Create();
+		Entity CreateEntity();
+		void DestroyEntity(Entity& entity);
+
+		void Draw();
+
+		static Ref<Scene> Create();
 
 	private:
 		entt::registry m_registry;
+
+		friend class Entity;
 	};
 }
