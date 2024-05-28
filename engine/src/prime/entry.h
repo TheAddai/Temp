@@ -6,7 +6,10 @@
 #ifdef P_WINDOWS
 int main(int argc, char** argv)
 {
-	prime::Engine::Run();
+	prime::Game* game = prime::CreateGame();
+	prime::Engine::Run(game);
+
+	delete game;
 	return 0;
 }
 #endif // P_WINDOWS
