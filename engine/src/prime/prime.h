@@ -17,3 +17,7 @@
 
 // renderer
 #include "renderer/renderer.h"
+
+// scene
+#include "scene/entity.h"
+#include "scene/scene.h"
