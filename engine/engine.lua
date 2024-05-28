@@ -20,3 +20,8 @@ project "engine"
     {
         "src",
     }
+
+    externalincludedirs
+    {
+        "%{includeDirs.spdlog}"
+    }

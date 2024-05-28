@@ -19,6 +19,11 @@ project "editor"
         "%{includeDirs.engine}"
     }
 
+    externalincludedirs
+    {
+        "%{includeDirs.spdlog}"
+    }
+
     links
     {
         "engine"
