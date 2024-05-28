@@ -58,9 +58,9 @@ namespace prime {
 		s_rendererAPI->SetViewport(width, height);
 	}
 
-	void Renderer::DrawQuad(const glm::vec2& position, const glm::vec2& scale, f32 rotation)
+	void Renderer::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
 	{
-		s_rendererAPI->DrawQuad(position, scale, rotation);
+		s_rendererAPI->DrawQuad(position, scale, color, rotation);
 	}
 
 	void Renderer::Init(void* windowHandle)

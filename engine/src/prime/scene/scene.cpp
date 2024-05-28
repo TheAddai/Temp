@@ -38,7 +38,7 @@ namespace prime {
 		for (entt::entity sE : sEs)
 		{
 			auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
-			Renderer::DrawQuad(sT.position, sT.scale, sT.rotation);
+			Renderer::DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
 		}
 
 		Renderer::EndDrawing();

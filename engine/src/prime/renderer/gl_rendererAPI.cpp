@@ -5,6 +5,7 @@
 #include "prime/core/assert.h"
 #include "vertex.h"
 #include "renderer.h"
+#include "shaders.h"
 
 #include <glad/glad.h>
 
@@ -21,12 +22,15 @@ namespace prime {
 
 	struct SpriteVertex
 	{
-		glm::vec3 position = glm::vec3(0.0f);
+		glm::vec2 position = glm::vec2(0.0f);
+		glm::vec4 color = glm::vec4(1.0f);
 	};
 
 	struct Data
 	{
 		ui32 maxSprites = 0, maxVertices = 0, maxIndices = 0;
+		ui32 spriteVertexShader = 0, spriteFragmentShader = 0;
+		ui32 spriteShaderProgram = 0;
 		glm::vec4 vertexPositions[4]{};
 
 		// sprite
@@ -43,6 +47,7 @@ namespace prime {
 		switch (vertexType)
 		{
 		case VertexType::position:
+		case VertexType::color:
 			return GL_FLOAT;
 			break;
 		}
@@ -75,6 +80,63 @@ namespace prime {
 		return glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
 			* rot
 			* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 0.0f });
+	}
+
+	static ui32 CompileShader(const char* shaderSource, i32 shaderType)
+	{
+		GLuint shader = glCreateShader(shaderType);
+		glShaderSource(shader, 1, &shaderSource, 0);
+		glCompileShader(shader);
+
+		// check to see if it compile
+		GLint compiled = 0;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+		if (compiled == 0)
+		{
+			GLint max_length = 0;
+			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_length);
+			char log_message[2000];
+			memset(log_message, 0, sizeof(log_message));
+			glGetShaderInfoLog(shader, max_length, &max_length, log_message);
+
+			if (shaderType == GL_VERTEX_SHADER) { P_ERROR("vertex shader compilation failed"); }
+			if (shaderType == GL_FRAGMENT_SHADER) { P_ERROR("fragment shader compilation failed"); }
+			P_ERROR("{0}", log_message);
+			P_ASSERT(false);
+		}
+		return shader;
+	}
+
+	static ui32 GenerateProgram(ui32 vertexShader, ui32 fragmentShader)
+	{
+		ui32 program = glCreateProgram();
+
+		glAttachShader(program, vertexShader);
+		glAttachShader(program, fragmentShader);
+		glLinkProgram(program);
+
+		// check if mProgram linked
+		GLint linked = 0;
+		glGetProgramiv(program, GL_LINK_STATUS, &linked);
+		if (linked == 0)
+		{
+			GLint max_length = 0;
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &max_length);
+			char log_message[4000];
+			memset(log_message, 0, sizeof(log_message));
+			glGetProgramInfoLog(program, max_length, &max_length, log_message);
+
+			glDeleteProgram(program);
+			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
+
+			P_ERROR("{0}", log_message);
+			P_ASSERT_MSG(false, "program linking failed");
+		}
+
+		glDetachShader(program, vertexShader);
+		glDetachShader(program, fragmentShader);
+		return program;
 	}
 
 	void GLRendererAPI::Init(void* windowHandle)
@@ -131,6 +193,7 @@ namespace prime {
 			glBindBuffer(GL_ARRAY_BUFFER, s_data.spriteVertexBuffer);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, (ui32)spriteDataSize, s_data.spriteVertexBufferBase);
 
+			glUseProgram(s_data.spriteShaderProgram);
 			glBindVertexArray(s_data.spriteVertexArray);
 			glDrawElements(GL_TRIANGLES, s_data.spriteIndexCount, GL_UNSIGNED_INT, nullptr);
 		}
@@ -151,7 +214,7 @@ namespace prime {
 		glViewport(0, 0, width, height);
 	}
 
-	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale, f32 rotation)
+	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
 	{
 		if (s_data.spriteIndexCount >= s_data.maxIndices)
 		{
@@ -163,6 +226,7 @@ namespace prime {
 		for (auto i = 0; i < 4; i++)
 		{
 			s_data.spriteVertexBufferPtr->position = transform * s_data.vertexPositions[i];
+			s_data.spriteVertexBufferPtr->color = color;
 			s_data.spriteVertexBufferPtr++;
 		}
 		s_data.spriteIndexCount += 6;
@@ -180,6 +244,7 @@ namespace prime {
 
 		VertexLayout spriteLayout;
 		spriteLayout.AddVertex(Vertex(VertexType::position, "a_position"));
+		spriteLayout.AddVertex(Vertex(VertexType::color, "a_color"));
 		SubmitDataToGPU(spriteLayout);
 
 		// indices
@@ -202,6 +267,10 @@ namespace prime {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_data.spriteIndexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, s_data.maxIndices, indices, GL_DYNAMIC_DRAW);
 		delete[] indices;
+
+		s_data.spriteVertexShader = CompileShader(s_spriteVertexShaderSource, GL_VERTEX_SHADER);
+		s_data.spriteFragmentShader = CompileShader(s_spritePixelShaderSource, GL_FRAGMENT_SHADER);
+		s_data.spriteShaderProgram = GenerateProgram(s_data.spriteVertexShader, s_data.spriteFragmentShader);
 	}
 	
 	void GLRendererAPI::StartBatch()

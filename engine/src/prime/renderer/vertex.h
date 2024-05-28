@@ -6,7 +6,8 @@
 
 enum class VertexType
 {
-	position
+	position,
+	color
 };
 
 static ui32 GetVertexTypeSize(VertexType vertexType)
@@ -14,7 +15,11 @@ static ui32 GetVertexTypeSize(VertexType vertexType)
 	switch (vertexType)
 	{
 	case VertexType::position:
-		return 12;
+		return 8;
+		break;
+
+	case VertexType::color:
+		return 16;
 		break;
 	}
 	return 0;
@@ -25,7 +30,11 @@ static ui32 GetVertexTypeCount(VertexType vertexType)
 	switch (vertexType)
 	{
 	case VertexType::position:
-		return 3;
+		return 2;
+		break;
+
+	case VertexType::color:
+		return 4;
 		break;
 	}
 	return 0;
