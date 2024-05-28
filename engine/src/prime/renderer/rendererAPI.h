@@ -14,5 +14,11 @@ namespace prime {
 		virtual void Clear() = 0;
 
 		virtual void SwapBuffers(void* windowHandle) = 0;
+		virtual void Flush() = 0;
+
+		virtual void BeginDrawing() = 0;
+		virtual void EndDrawing() = 0;
+
+		virtual void DrawQuad(const glm::vec2& position, const glm::vec2& scale) = 0;
 	};
 }

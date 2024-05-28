@@ -9,6 +9,8 @@
 namespace prime {
 
 	Renderer::API Renderer::s_API;
+	Renderer::Config Renderer::s_config;
+
 	static RendererAPI* s_rendererAPI = nullptr;
 	static void* s_windowHandle = nullptr;
 
@@ -39,6 +41,21 @@ namespace prime {
 	void Renderer::Clear()
 	{
 		s_rendererAPI->Clear();
+	}
+
+	void Renderer::BeginDrawing()
+	{
+		s_rendererAPI->BeginDrawing();
+	}
+
+	void Renderer::EndDrawing()
+	{
+		s_rendererAPI->EndDrawing();
+	}
+
+	void Renderer::DrawQuad(const glm::vec2 position, const glm::vec2 scale)
+	{
+		s_rendererAPI->DrawQuad(position, scale);
 	}
 
 	void Renderer::Init(void* windowHandle)

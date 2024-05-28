@@ -16,6 +16,7 @@ namespace prime {
 			bool fullScreen = false, vSync = true;
 			std::string title = "Prime Game";
 			Renderer::API API = Renderer::API::openGL;
+			Renderer::Config rendererConfig;
 		};
 
 		virtual void Init() = 0;
