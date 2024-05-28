@@ -24,6 +24,10 @@ namespace prime {
 		}
 
 	private:
+		void Dockspace();
+		void Viewport();
+
+	private:
 		Ref<Scene> m_scene;
 	};
 }
