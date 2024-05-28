@@ -10,10 +10,12 @@ namespace prime {
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_scene = Scene::Create();
 
+		m_frameBuffer = Framebuffer::Create(640, 480);
+
 		Entity red = m_scene->CreateEntity();
 		red.GetComponent<TransformComponent>().scale.x = 0.2f;
 		red.GetComponent<TransformComponent>().scale.y = 0.2f;
-		red.GetComponent<TransformComponent>().position.x = -.4f;
+		red.GetComponent<TransformComponent>().position.x = -0.4f;
 		red.AddComponent<SpriteComponent>().color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 		Entity green = m_scene->CreateEntity();
@@ -35,12 +37,15 @@ namespace prime {
 
 	void Editor::Update()
 	{
+		m_frameBuffer->Bind();
 		m_scene->Draw();
+		m_frameBuffer->Unbind();
 	}
 
 	void Editor::ImGuiRender()
 	{
 		Dockspace();
+		Viewport();
 	}
 	
 	void Editor::Dockspace()
@@ -85,6 +90,16 @@ namespace prime {
 	
 	void Editor::Viewport()
 	{
-		
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		uint64_t textureID = m_frameBuffer->GetTextureID();
+		ImGui::Image((ImTextureID)textureID, { m_viewportSize.x, m_viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		ImGui::End();
+		ImGui::PopStyleVar();
 	}
 }

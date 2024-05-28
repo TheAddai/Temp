@@ -18,6 +18,7 @@
 
 // renderer
 #include "renderer/renderer.h"
+#include "renderer/frame_buffer.h"
 
 // scene
 #include "scene/components.h"

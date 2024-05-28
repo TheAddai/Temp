@@ -16,7 +16,7 @@ namespace prime {
 		Config GetConfig() const override
 		{
 			Config config;
-			config.fullScreen = true;
+			config.fullScreen = false;
 			config.title = "Prime Editor";
 			config.vSync = true;
 
@@ -29,5 +29,7 @@ namespace prime {
 
 	private:
 		Ref<Scene> m_scene;
+		Ref<Framebuffer> m_frameBuffer;
+		glm::vec2 m_viewportSize = glm::vec2(0.0f);
 	};
 }
