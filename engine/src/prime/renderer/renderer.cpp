@@ -53,6 +53,11 @@ namespace prime {
 		s_rendererAPI->EndDrawing();
 	}
 
+	void Renderer::SetViewport(ui32 width, ui32 height)
+	{
+		s_rendererAPI->SetViewport(width, height);
+	}
+
 	void Renderer::DrawQuad(const glm::vec2 position, const glm::vec2 scale)
 	{
 		s_rendererAPI->DrawQuad(position, scale);

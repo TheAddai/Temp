@@ -16,6 +16,15 @@ namespace prime {
 		s_running = false;
 	}
 
+	static void OnWindowResize(const WindowResizeEvent& e)
+	{
+		if (e.GetWidth() > 0 && e.GetHeight() > 0)
+		{
+			Renderer::SetViewport(e.GetWidth(), e.GetHeight());
+		}
+	
+	}
+
 	void Engine::Run(Game* game)
 	{
 		//init
@@ -33,6 +42,7 @@ namespace prime {
 
 		// subscribe to events
 		Dispatcher::Get().sink<WindowCloseEvent>().connect<&OnWindowClose>();
+		Dispatcher::Get().sink<WindowResizeEvent>().connect<&OnWindowResize>();
 
 		// update
 		while (s_running)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "prime/core/defines.h"
+
 #include <glm/glm.hpp>
 
 namespace prime {
@@ -18,6 +20,7 @@ namespace prime {
 
 		virtual void BeginDrawing() = 0;
 		virtual void EndDrawing() = 0;
+		virtual void SetViewport(ui32 width, ui32 height) = 0;
 
 		virtual void DrawQuad(const glm::vec2& position, const glm::vec2& scale) = 0;
 	};

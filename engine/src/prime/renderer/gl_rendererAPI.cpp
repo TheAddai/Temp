@@ -146,6 +146,11 @@ namespace prime {
 		Flush();
 	}
 
+	void GLRendererAPI::SetViewport(ui32 width, ui32 height)
+	{
+		glViewport(0, 0, width, height);
+	}
+
 	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale)
 	{
 		if (s_data.spriteIndexCount >= s_data.maxIndices)

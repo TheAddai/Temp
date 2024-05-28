@@ -25,6 +25,7 @@ namespace prime {
 
 		static void BeginDrawing();
 		static void EndDrawing();
+		static void SetViewport(ui32 width, ui32 height);
 
 		// primitives
 		static void DrawQuad(const glm::vec2 position, const glm::vec2 scale);
