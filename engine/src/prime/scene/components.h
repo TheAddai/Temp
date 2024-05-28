@@ -2,6 +2,7 @@
 
 #include "prime/core/defines.h"
 #include "prime/core/guid.h"
+#include "camera.h"
 
 #include <glm/glm.hpp>
 
@@ -40,5 +41,15 @@ namespace prime {
 
 	public:
 		glm::vec4 color = glm::vec4(1.0f);
+	};
+
+	struct CameraComponent
+	{
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+
+	public:
+		Camera camera;
+		bool fixedAspectRatio = false;
 	};
 }
