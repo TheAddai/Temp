@@ -6,13 +6,10 @@
 #include "vertex.h"
 #include "renderer.h"
 #include "shaders.h"
+#include "prime/core/math.h"
 
 #include <glad/glad.h>
-
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
 
 #ifdef P_WINDOWS
 #include <GLFW/glfw3.h>
@@ -29,12 +26,13 @@ namespace prime {
 	struct Data
 	{
 		ui32 maxSprites = 0, maxVertices = 0, maxIndices = 0;
-		ui32 spriteVertexShader = 0, spriteFragmentShader = 0;
-		ui32 spriteShaderProgram = 0;
 		glm::vec4 vertexPositions[4]{};
+		ui32 cameraUniformBuffer = 0;
 
 		// sprite
 		ui32 spriteVertexArray = 0, spriteVertexBuffer = 0, spriteIndexBuffer = 0;
+		ui32 spriteVertexShader = 0, spriteFragmentShader = 0;
+		ui32 spriteShaderProgram = 0;
 		SpriteVertex* spriteVertexBufferPtr = nullptr;
 		SpriteVertex* spriteVertexBufferBase = nullptr;
 		ui32 spriteIndexCount = 0;
@@ -71,15 +69,6 @@ namespace prime {
 
 			index++;
 		}
-	}
-
-	glm::mat4 GetTransform(const glm::vec2& position, const glm::vec2& scale, f32 rotation)
-	{
-		glm::mat4 rot = glm::toMat4(glm::quat(glm::vec3(0.0f, 0.0f, rotation)));
-			
-		return glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-			* rot
-			* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 0.0f });
 	}
 
 	static ui32 CompileShader(const char* shaderSource, i32 shaderType)
@@ -157,6 +146,11 @@ namespace prime {
 		s_data.vertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
 		InitSpriteRendering();
+
+		glGenBuffers(1, &s_data.cameraUniformBuffer);
+		glBindBuffer(GL_UNIFORM_BUFFER, s_data.cameraUniformBuffer);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, s_data.cameraUniformBuffer);
 	}
 
 	void GLRendererAPI::Shutdown()
@@ -166,6 +160,14 @@ namespace prime {
 		glDeleteBuffers(1, &s_data.spriteVertexBuffer);
 		glDeleteBuffers(1, &s_data.spriteIndexBuffer);
 		glDeleteVertexArrays(1, &s_data.spriteVertexArray);
+
+		glDetachShader(s_data.spriteShaderProgram, s_data.spriteVertexShader);
+		glDetachShader(s_data.spriteShaderProgram, s_data.spriteFragmentShader);
+		glDeleteProgram(s_data.spriteShaderProgram);
+		glDeleteShader(s_data.spriteVertexShader);
+		glDeleteShader(s_data.spriteFragmentShader);
+
+		glDeleteBuffers(1, &s_data.cameraUniformBuffer);
 	}
 
 	void GLRendererAPI::SetClearColor(const glm::vec4& color)
@@ -199,9 +201,12 @@ namespace prime {
 		}
 	}
 
-	void GLRendererAPI::BeginDrawing()
+	void GLRendererAPI::BeginDrawing(const glm::mat4& projection)
 	{
 		StartBatch();
+
+		glBindBuffer(GL_UNIFORM_BUFFER, s_data.cameraUniformBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projection);
 	}
 
 	void GLRendererAPI::EndDrawing()

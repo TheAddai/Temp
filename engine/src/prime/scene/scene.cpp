@@ -7,41 +7,57 @@
 
 namespace prime {
 
-	Scene::~Scene()
+	void Scene::Init()
+	{
+		m_entities.clear();
+		m_cameraEntityGUID = 0;
+
+		Entity mainCamera = CreateEntity();
+		mainCamera.AddComponent<CameraComponent>();
+		m_cameraEntityGUID = mainCamera.GetComponent<IDComponent>().guid;
+	}
+
+	void Scene::Destroy()
 	{
 		entt::basic_view entities = m_registry.view<TransformComponent>();
 		for (entt::entity entity : entities)
 		{
 			m_registry.destroy(entity);
 		}
+
+		m_cameraEntityGUID = 0;
+		m_entities.clear();
 	}
 
 	Entity Scene::CreateEntity()
 	{
-		Entity entity(m_registry.create(), this);
+		Guid guid = Guid();
+		Entity entity = Entity(m_registry.create(), this);
+		entity.AddComponent<IDComponent>(guid);
 		entity.AddComponent<TransformComponent>();
-		entity.AddComponent<IDComponent>();
+		m_entities[guid] = entity;
 		return entity;
 	}
 
 	void Scene::DestroyEntity(Entity& entity)
 	{
+		ui64 guid = entity.GetComponent<IDComponent>().guid;
 		m_registry.destroy(entity);
+		m_entities.erase(guid);
 	}
 
-	void Scene::Draw()
+	Entity& Scene::GetMainCamera()
 	{
-		Renderer::Clear();
-		Renderer::BeginDrawing();
+		return m_entities[m_cameraEntityGUID];
+	}
 
-		entt::basic_view sEs = m_registry.view<TransformComponent, SpriteComponent>();
-		for (entt::entity sE : sEs)
+	void Scene::SetMainCamera(Entity& entity)
+	{
+		if (entity.HasComponent<CameraComponent>())
 		{
-			auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
-			Renderer::DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
+			ui64 guid = entity.GetComponent<IDComponent>().guid;
+			m_cameraEntityGUID = guid;
 		}
-
-		Renderer::EndDrawing();
 	}
 
 	Ref<Scene> Scene::Create()

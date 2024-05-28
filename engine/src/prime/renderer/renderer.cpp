@@ -3,6 +3,10 @@
 #include "renderer.h"
 #include "rendererAPI.h"
 #include "prime/platform/platform.h"
+#include "prime/scene/scene.h"
+#include "prime/scene/components.h"
+#include "prime/scene/entity.h"
+#include "prime/core/math.h"
 
 // openGL
 #include "gl_rendererAPI.h"
@@ -44,24 +48,35 @@ namespace prime {
 		s_rendererAPI->Clear();
 	}
 
-	void Renderer::BeginDrawing()
-	{
-		s_rendererAPI->BeginDrawing();
-	}
-
-	void Renderer::EndDrawing()
-	{
-		s_rendererAPI->EndDrawing();
-	}
-
 	void Renderer::SetViewport(ui32 width, ui32 height)
 	{
 		s_rendererAPI->SetViewport(width, height);
 	}
 
-	void Renderer::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
+	void Renderer::DrawScene(Ref<Scene>& scene)
 	{
-		s_rendererAPI->DrawQuad(position, scale, color, rotation);
+		s_rendererAPI->Clear();
+
+		Entity& cameraEntity = scene->GetMainCamera();
+		if (cameraEntity)
+		{
+			TransformComponent& tC = cameraEntity.GetComponent<TransformComponent>();
+			glm::mat4 tM = glm::inverse(GetTransform(tC.position, tC.rotation));
+
+			Camera& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+			glm::mat4 projection = camera.GetProjection() * tM;
+
+			s_rendererAPI->BeginDrawing(projection);
+
+			entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();
+			for (entt::entity sE : sEs)
+			{
+				auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
+				s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
+			}
+
+			s_rendererAPI->EndDrawing();
+		}
 	}
 
 	void Renderer::Init(void* windowHandle)

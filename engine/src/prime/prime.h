@@ -10,6 +10,7 @@
 #include "core/game.h"
 #include "core/key.h"
 #include "core/logger.h"
+#include "core/math.h"
 #include "core/ref.h"
 
 // platform

@@ -18,7 +18,7 @@ namespace prime {
 		void SwapBuffers(void* windowHandle) override;
 		void Flush() override;
 
-		void BeginDrawing() override;
+		void BeginDrawing(const glm::mat4& projection) override;
 		void EndDrawing() override;
 		void SetViewport(ui32 width, ui32 height) override;
 

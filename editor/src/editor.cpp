@@ -9,6 +9,7 @@ namespace prime {
 	{
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_scene = Scene::Create();
+		m_scene->Init();
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
 
@@ -32,7 +33,7 @@ namespace prime {
 
 	void Editor::Shutdown()
 	{
-
+		m_scene->Destroy();
 	}
 
 	void Editor::Update()
@@ -40,7 +41,7 @@ namespace prime {
 		ResizeViewport();
 
 		m_frameBuffer->Bind();
-		m_scene->Draw();
+		Renderer::DrawScene(m_scene);
 		m_frameBuffer->Unbind();
 	}
 

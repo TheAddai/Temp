@@ -21,12 +21,15 @@ namespace prime {
 		f32 GetFarClip() const { return m_far; }
 		void SetFarClip(f32 farClip);
 
+		glm::mat4 GetProjection() { return m_projection; }
+
 	private:
 		void CalculateProjection();
 
 	private:
 		f32 m_size = 10.0f;
 		f32 m_near = -1.0f, m_far = 1.0f;
-		f32 m_aspectRatio = 0.0f;
+		f32 m_aspectRatio = 1.7776f;
+		glm::mat4 m_projection = glm::mat4(1.0f);
 	};
 }

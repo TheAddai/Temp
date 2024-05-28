@@ -18,7 +18,7 @@ namespace prime {
 		virtual void SwapBuffers(void* windowHandle) = 0;
 		virtual void Flush() = 0;
 
-		virtual void BeginDrawing() = 0;
+		virtual void BeginDrawing(const glm::mat4& projection) = 0;
 		virtual void EndDrawing() = 0;
 		virtual void SetViewport(ui32 width, ui32 height) = 0;
 
