@@ -20,6 +20,9 @@ namespace prime {
 		void Shutdown();
 
 		void Update();
+		void SetVSync(b8 enable);
+
+		b8 IsVSync() { return m_data.vSync; }
 
 		void* GetWindowHandle() const { return m_windowHandle; }
 		ui32 GetWidth() const { return m_data.width; }

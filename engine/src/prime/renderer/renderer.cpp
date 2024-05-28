@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "renderer.h"
 #include "rendererAPI.h"
+#include "prime/platform/platform.h"
 
 // openGL
 #include "gl_rendererAPI.h"

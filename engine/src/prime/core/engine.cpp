@@ -35,6 +35,7 @@ namespace prime {
 		s_platform.Init(gameConfig.title, gameConfig.width, gameConfig.height, gameConfig.fullScreen);
 		Renderer::s_API = gameConfig.API;
 		Renderer::Init(s_platform.GetWindowHandle());
+		s_platform.SetVSync(gameConfig.vSync);
 
 		game->Init();
 		s_running = true;

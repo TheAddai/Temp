@@ -115,6 +115,13 @@ namespace prime {
 	{
 		glfwPollEvents();
 	}
+
+	void Platform::SetVSync(b8 enable)
+	{
+		if (enable) { glfwSwapInterval(1); }
+		else { glfwSwapInterval(0); }
+		m_data.vSync = enable;
+	}
 }
 
 #endif // P_WINDOWS

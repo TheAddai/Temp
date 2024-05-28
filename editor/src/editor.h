@@ -15,6 +15,9 @@ namespace prime {
 		Config GetConfig() const override
 		{
 			Config config;
+			config.fullScreen = true;
+			config.title = "Prime Editor";
+			config.vSync = true;
 
 			return config;
 		}
