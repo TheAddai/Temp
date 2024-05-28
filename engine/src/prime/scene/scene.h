@@ -5,6 +5,7 @@
 
 #include <entt/entt.hpp>
 #include <map>
+#include <string>
 
 namespace prime {
 
@@ -17,7 +18,7 @@ namespace prime {
 		void Init();
 		void Destroy();
 
-		Entity CreateEntity();
+		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity& entity);
 
 		Entity& GetMainCamera();
@@ -33,5 +34,6 @@ namespace prime {
 
 		friend class Entity;
 		friend class Renderer;
+		friend class SceneHeirarchy;
 	};
 }

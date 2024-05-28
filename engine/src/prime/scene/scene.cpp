@@ -12,7 +12,7 @@ namespace prime {
 		m_entities.clear();
 		m_cameraEntityGUID = 0;
 
-		Entity mainCamera = CreateEntity();
+		Entity mainCamera = CreateEntity("MainCamera");
 		mainCamera.AddComponent<CameraComponent>();
 		m_cameraEntityGUID = mainCamera.GetComponent<IDComponent>().guid;
 	}
@@ -29,12 +29,15 @@ namespace prime {
 		m_entities.clear();
 	}
 
-	Entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Guid guid = Guid();
 		Entity entity = Entity(m_registry.create(), this);
 		entity.AddComponent<IDComponent>(guid);
 		entity.AddComponent<TransformComponent>();
+		auto& nameC = entity.AddComponent<NameComponent>();
+		nameC.name = name.empty() ? "Entity" : name;
+
 		m_entities[guid] = entity;
 		return entity;
 	}

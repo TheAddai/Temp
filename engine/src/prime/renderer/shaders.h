@@ -10,10 +10,15 @@ static const char* s_spriteVertexShaderSource = R"(
 
     out vec4 v_color;
 
+    layout(std140) uniform cameraBlock
+    {
+	    mat4 u_viewProjection;
+    };
+
     void main()
     {
         v_color = a_color;
-        gl_Position = vec4(a_position, 0.0, 1.0);
+        gl_Position = u_viewProjection * vec4(a_position, 0.0, 1.0);
     }
 )";
 

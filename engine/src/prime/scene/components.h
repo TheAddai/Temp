@@ -5,6 +5,7 @@
 #include "camera.h"
 
 #include <glm/glm.hpp>
+#include <string>
 
 namespace prime {
 
@@ -51,5 +52,15 @@ namespace prime {
 	public:
 		Camera camera;
 		bool fixedAspectRatio = false;
+	};
+
+	struct NameComponent
+	{
+		std::string name;
+
+		NameComponent() = default;
+		NameComponent(const NameComponent&) = default;
+		NameComponent(const std::string& name)
+			: name(name) {}
 	};
 }

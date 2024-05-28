@@ -13,22 +13,24 @@ namespace prime {
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
 
-		Entity red = m_scene->CreateEntity();
-		red.GetComponent<TransformComponent>().scale.x = 0.2f;
-		red.GetComponent<TransformComponent>().scale.y = 0.2f;
-		red.GetComponent<TransformComponent>().position.x = -0.4f;
+		Entity red = m_scene->CreateEntity("Red");
+		red.GetComponent<TransformComponent>().scale.x = 1.0f;
+		red.GetComponent<TransformComponent>().scale.y = 1.0f;
+		red.GetComponent<TransformComponent>().position.x = -4.0f;
 		red.AddComponent<SpriteComponent>().color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-		Entity green = m_scene->CreateEntity();
-		green.GetComponent<TransformComponent>().scale.x = 0.2f;
-		green.GetComponent<TransformComponent>().scale.y = 0.2f;
+		Entity green = m_scene->CreateEntity("Green");
+		green.GetComponent<TransformComponent>().scale.x = 1.0f;
+		green.GetComponent<TransformComponent>().scale.y = 1.0f;
 		green.AddComponent<SpriteComponent>().color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 
-		Entity blue = m_scene->CreateEntity();
-		blue.GetComponent<TransformComponent>().scale.x = 0.2f;
-		blue.GetComponent<TransformComponent>().scale.y = 0.2f;
-		blue.GetComponent<TransformComponent>().position.x = .4f;
+		Entity blue = m_scene->CreateEntity("Blue");
+		blue.GetComponent<TransformComponent>().scale.x = 1.0f;
+		blue.GetComponent<TransformComponent>().scale.y = 1.0f;
+		blue.GetComponent<TransformComponent>().position.x = 4.0f;
 		blue.AddComponent<SpriteComponent>().color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+		m_sceneHeirarchy.SetScene(m_scene);
 	}
 
 	void Editor::Shutdown()
@@ -48,6 +50,7 @@ namespace prime {
 	void Editor::ImGuiRender()
 	{
 		Dockspace();
+		m_sceneHeirarchy.ImGuiRender();
 		Viewport();
 	}
 	

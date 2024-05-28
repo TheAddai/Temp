@@ -1,6 +1,7 @@
 #pragma once
 
 #include "prime/prime.h"
+#include "panels/scene_hierarchy.h"
 
 namespace prime {
 
@@ -33,5 +34,8 @@ namespace prime {
 		Ref<Scene> m_scene;
 		Ref<Framebuffer> m_frameBuffer;
 		glm::vec2 m_viewportSize = glm::vec2(0.0f);
+
+		// panels
+		SceneHeirarchy m_sceneHeirarchy;
 	};
 }
