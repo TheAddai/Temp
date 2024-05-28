@@ -25,11 +25,12 @@ namespace prime {
 		b8 IsVSync() { return m_data.vSync; }
 
 		void* GetWindowHandle() const { return m_windowHandle; }
+
 		ui32 GetWidth() const { return m_data.width; }
 		ui32 GetHeight() const { return m_data.height; }
 
 	private:
-		void* m_windowHandle = nullptr;
+		void* m_windowHandle;
 		Data m_data;
 	};
 }

@@ -23,7 +23,8 @@ project "editor"
     {
         "%{includeDirs.spdlog}",
         "%{includeDirs.glm}",
-        "%{includeDirs.entt}"
+        "%{includeDirs.entt}",
+        "%{includeDirs.imgui}"
     }
 
     links

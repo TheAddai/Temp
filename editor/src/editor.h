@@ -11,6 +11,7 @@ namespace prime {
 		void Shutdown() override;
 
 		void Update() override;
+		void ImGuiRender() override;
 
 		Config GetConfig() const override
 		{

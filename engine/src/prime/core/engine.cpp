@@ -5,11 +5,14 @@
 #include "prime/renderer/renderer.h"
 #include "events.h"
 #include "dispatcher.h"
+#include "prime/imgui/imguiAPI.h"
 
 namespace prime {
 
 	Platform Engine::s_platform;
 	static b8 s_running = false;
+
+	static ImGuiAPI* s_imguiAPI = nullptr;
 
 	static void OnWindowClose(const WindowCloseEvent&)
 	{
@@ -37,6 +40,10 @@ namespace prime {
 		Renderer::Init(s_platform.GetWindowHandle());
 		s_platform.SetVSync(gameConfig.vSync);
 
+		// imgui
+		s_imguiAPI = ImGuiAPI::Create();
+		s_imguiAPI->Init();
+
 		game->Init();
 		s_running = true;
 
@@ -49,14 +56,21 @@ namespace prime {
 		{
 			s_platform.Update();
 			Dispatcher::Get().update();
-
 			game->Update();
+
+			s_imguiAPI->BeginRender();
+			game->ImGuiRender();
+			s_imguiAPI->EndRender();
+
 			Renderer::SwapBuffers();
 		}
 
 		// shutdown
 		game->Shutdown();
 		Renderer::Shutdown();
+
+		s_imguiAPI->Shutdown();
+		delete s_imguiAPI;
 
 		s_platform.Shutdown();
 		Dispatcher::Get().clear();

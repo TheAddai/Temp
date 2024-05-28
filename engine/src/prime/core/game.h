@@ -23,6 +23,8 @@ namespace prime {
 		virtual void Shutdown() = 0;
 
 		virtual void Update() = 0;
+		virtual void ImGuiRender() = 0;
+
 		virtual Config GetConfig() const = 0;
 	};
 

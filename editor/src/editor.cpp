@@ -1,6 +1,8 @@
 
 #include "editor.h"
 
+#include <imgui/imgui.h>
+
 namespace prime {
 
 	void Editor::Init()
@@ -34,5 +36,11 @@ namespace prime {
 	void Editor::Update()
 	{
 		m_scene->Draw();
+	}
+
+	void Editor::ImGuiRender()
+	{
+		static b8 show = true;
+		ImGui::ShowDemoWindow(&show);
 	}
 }

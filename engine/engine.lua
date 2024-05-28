@@ -32,11 +32,13 @@ project "engine"
         "%{includeDirs.glfw}",
         "%{includeDirs.glad}",
         "%{includeDirs.glm}",
-        "%{includeDirs.entt}"
+        "%{includeDirs.entt}",
+        "%{includeDirs.imgui}"
     }
 
     links
     {
         "glfw",
-        "glad"
+        "glad",
+        "imgui"
     }
