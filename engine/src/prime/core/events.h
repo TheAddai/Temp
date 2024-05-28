@@ -6,20 +6,14 @@
 
 namespace prime {
 
-	class Event
-	{
-	public:
-		Event() = default;
-	};
-
 	// window events
-	class WindowCloseEvent : public Event
+	class WindowCloseEvent
 	{
 	public:
 		WindowCloseEvent() = default;
 	};
 
-	class WindowResizeEvent : public Event
+	class WindowResizeEvent
 	{
 	public:
 		WindowResizeEvent() = default;
@@ -34,7 +28,7 @@ namespace prime {
 	};
 
 	// key events
-	class KeyPressedEvent : public Event
+	class KeyPressedEvent
 	{
 	public:
 		KeyPressedEvent() = default;
@@ -49,7 +43,7 @@ namespace prime {
 		b8 m_repeat = false;
 	};
 
-	class KeyReleasedEvent : public Event
+	class KeyReleasedEvent
 	{
 	public:
 		KeyReleasedEvent() = default;
@@ -62,7 +56,7 @@ namespace prime {
 	};
 
 	// mouse events
-	class MouseButtonPressedEvent : public Event
+	class MouseButtonPressedEvent
 	{
 	public:
 		MouseButtonPressedEvent() = default;
@@ -74,7 +68,7 @@ namespace prime {
 		Button m_button;
 	};
 
-	class MouseButtonReleasedEvent : public Event
+	class MouseButtonReleasedEvent
 	{
 	public:
 		MouseButtonReleasedEvent() = default;
@@ -86,7 +80,7 @@ namespace prime {
 		Button m_button;
 	};
 
-	class MouseMovedEvent : public Event
+	class MouseMovedEvent
 	{
 	public:
 		MouseMovedEvent() = default;
@@ -99,7 +93,7 @@ namespace prime {
 		f32 m_x = 0.0f, m_y = 0.0f;
 	};
 
-	class MouseScrolledEvent : public Event
+	class MouseScrolledEvent
 	{
 	public:
 		MouseScrolledEvent() = default;

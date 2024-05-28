@@ -4,6 +4,7 @@
 #include "core/assert.h"
 #include "core/button.h"
 #include "core/defines.h"
+#include "core/dispatcher.h"
 #include "core/engine.h"
 #include "core/events.h"
 #include "core/game.h"

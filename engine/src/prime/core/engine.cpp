@@ -3,12 +3,18 @@
 #include "engine.h"
 #include "logger.h"
 #include "prime/renderer/renderer.h"
-#include "prime/core/events.h"
+#include "events.h"
+#include "dispatcher.h"
 
 namespace prime {
 
 	Platform Engine::s_platform;
 	static b8 s_running = false;
+
+	static void OnWindowClose(const WindowCloseEvent&)
+	{
+		s_running = false;
+	}
 
 	void Engine::Run(Game* game)
 	{
@@ -25,12 +31,16 @@ namespace prime {
 		game->Init();
 		s_running = true;
 
+		// subscribe to events
+		Dispatcher::Get().sink<WindowCloseEvent>().connect<&OnWindowClose>();
+
 		// update
 		while (s_running)
 		{
 			s_platform.Update();
-			Renderer::Clear();
+			Dispatcher::Get().update();
 
+			Renderer::Clear();
 			game->Update();
 			Renderer::SwapBuffers();
 		}
@@ -38,7 +48,9 @@ namespace prime {
 		// shutdown
 		game->Shutdown();
 		Renderer::Shutdown();
+
 		s_platform.Shutdown();
+		Dispatcher::Get().clear();
 		Logger::Shutdown();
 	}
 }

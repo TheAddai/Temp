@@ -4,6 +4,7 @@
 #include "platform.h"
 #include "prime/core/assert.h"
 #include "prime/core/events.h"
+#include "prime/core/Dispatcher.h"
 
 #ifdef P_WINDOWS
 #include <GLFW/glfw3.h>
@@ -23,12 +24,13 @@ namespace prime {
 				data.width = width;
 				data.height = height;
 
-				P_INFO("resize callback");
+				Dispatcher::Get().enqueue<WindowResizeEvent>(width, height);
 			});
 
 		glfwSetWindowCloseCallback(windowHandle, [](GLFWwindow* window)
 			{
-				P_INFO("close callback");
+				Dispatcher::Get().enqueue<WindowCloseEvent>();
+				
 			});
 
 		glfwSetKeyCallback(windowHandle, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -39,17 +41,17 @@ namespace prime {
 				{
 				case GLFW_PRESS:
 				{
-					P_INFO("key pressed callback");
+					Dispatcher::Get().enqueue<KeyPressedEvent>((Key)key, false);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					P_INFO("key released callback");
+					Dispatcher::Get().enqueue<KeyReleasedEvent>((Key)key);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					P_INFO("key repeat callback");
+					Dispatcher::Get().enqueue<KeyPressedEvent>((Key)key, true);
 					break;
 				}
 				}
@@ -63,12 +65,12 @@ namespace prime {
 				{
 				case GLFW_PRESS:
 				{
-					P_INFO("mouse pressed callback");
+					Dispatcher::Get().enqueue<MouseButtonPressedEvent>((Button)button);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					P_INFO("mouse released callback");
+					Dispatcher::Get().enqueue<MouseButtonReleasedEvent>((Button)button);
 					break;
 				}
 				}
@@ -76,12 +78,12 @@ namespace prime {
 
 		glfwSetScrollCallback(windowHandle, [](GLFWwindow* window, double xOffset, double yOffset)
 			{
-				P_INFO("scroll callback");
+				Dispatcher::Get().enqueue<MouseScrolledEvent>((f32)xOffset, (f32)yOffset);
 			});
 
 		glfwSetCursorPosCallback(windowHandle, [](GLFWwindow* window, double xPos, double yPos)
 			{
-				P_INFO("cursor callback");
+				Dispatcher::Get().enqueue<MouseScrolledEvent>((f32)xPos, (f32)yPos);
 			});
 	}
 
