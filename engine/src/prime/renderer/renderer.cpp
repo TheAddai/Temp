@@ -57,15 +57,25 @@ namespace prime {
 	{
 		s_rendererAPI->Clear();
 
-		Entity& cameraEntity = scene->GetMainCamera();
-		if (cameraEntity)
+		glm::mat4 cM = glm::mat4(1.0f);
+		Camera* mainCamera = nullptr;
+
+		entt::basic_view cEs = scene->m_registry.view<TransformComponent, CameraComponent>();
+		for (entt::entity cE : cEs)
 		{
-			TransformComponent& tC = cameraEntity.GetComponent<TransformComponent>();
-			glm::mat4 tM = glm::inverse(GetTransform(tC.position, tC.rotation));
+			auto [cT, c] = cEs.get<TransformComponent, CameraComponent>(cE);
 
-			Camera& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-			glm::mat4 projection = camera.GetProjection() * tM;
+			if (c.primary)
+			{
+				mainCamera = &c.camera;
+				cM = glm::inverse(GetTransform(cT.position, cT.rotation));
+				break;
+			}
+		}
 
+		if (mainCamera)
+		{
+			glm::mat4 projection = mainCamera->GetProjection() * cM;
 			s_rendererAPI->BeginDrawing(projection);
 
 			entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();

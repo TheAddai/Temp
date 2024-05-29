@@ -4,6 +4,7 @@
 #include "UI.h"
 
 #include <imgui/imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace prime {
 
@@ -38,6 +39,29 @@ namespace prime {
 					f32 rotation = glm::degrees(component.rotation);
 					DrawfloatControl("Rotation", rotation, 0.0f, columnWidth);
 					component.rotation = glm::radians(rotation);
+				});
+
+			DrawComponent<SpriteComponent>("SpriteRenderer", entity, true, [](auto& component)
+				{
+					ImGui::ColorPicker4("##Color", glm::value_ptr(component.color));
+				});
+
+			DrawComponent<CameraComponent>("CameraComponent", entity, true, [](auto& component)
+				{
+					Camera& camera = component.camera;
+					ImGui::Checkbox("Primary", &component.primary);
+
+					float orthoSize = camera.GetSize();
+					if (ImGui::DragFloat("Size", &orthoSize))
+						camera.SetSize(orthoSize);
+
+					float orthoNear = camera.GetNearClip();
+					if (ImGui::DragFloat("Near", &orthoNear))
+						camera.SetNearClip(orthoNear);
+
+					float orthoFar = camera.GetFarClip();
+					if (ImGui::DragFloat("Far", &orthoFar))
+						camera.SetFarClip(orthoFar);
 				});
 
 			DrawAddComponentButton();

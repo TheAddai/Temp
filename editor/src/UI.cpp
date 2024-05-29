@@ -3,7 +3,7 @@
 
 namespace prime {
 
-	void DrawVec2Control(const std::string& label, glm::vec2& values, float resetValue, float columnWidth)
+	void DrawVec2Control(const std::string& label, glm::vec2& values, f32 resetValue, f32 columnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];

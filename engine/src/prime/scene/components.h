@@ -50,8 +50,8 @@ namespace prime {
 		CameraComponent(const CameraComponent&) = default;
 
 	public:
+		b8 primary = false;
 		Camera camera;
-		bool fixedAspectRatio = false;
 	};
 
 	struct NameComponent

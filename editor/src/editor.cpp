@@ -15,27 +15,8 @@ namespace prime {
 
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_scene = Scene::Create();
-		m_scene->Init();
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
-
-		Entity red = m_scene->CreateEntity("Red");
-		red.GetComponent<TransformComponent>().scale.x = 1.0f;
-		red.GetComponent<TransformComponent>().scale.y = 1.0f;
-		red.GetComponent<TransformComponent>().position.x = -4.0f;
-		red.AddComponent<SpriteComponent>().color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-
-		Entity green = m_scene->CreateEntity("Green");
-		green.GetComponent<TransformComponent>().scale.x = 1.0f;
-		green.GetComponent<TransformComponent>().scale.y = 1.0f;
-		green.AddComponent<SpriteComponent>().color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-
-		Entity blue = m_scene->CreateEntity("Blue");
-		blue.GetComponent<TransformComponent>().scale.x = 1.0f;
-		blue.GetComponent<TransformComponent>().scale.y = 1.0f;
-		blue.GetComponent<TransformComponent>().position.x = 4.0f;
-		blue.AddComponent<SpriteComponent>().color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-
 		m_sceneHeirarchy.SetScene(m_scene);
 	}
 
