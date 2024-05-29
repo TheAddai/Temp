@@ -19,9 +19,12 @@ namespace prime {
 		if (m_scene)
 		{
 			entt::basic_view entities = m_scene->m_registry.view<TransformComponent>();
+			ui64 maxEntities = entities.size() - 1;
+
 			for (entt::entity entityID : entities)
 			{
-				Entity entity{ entityID , m_scene.get() };
+				entt::entity id = (entt::entity)(maxEntities - (ui32)entityID);
+				Entity entity{ id , m_scene.get()};
 				DrawEntityNode(entity);
 			}
 		}
@@ -43,9 +46,7 @@ namespace prime {
 
 		if (opened)
 		{
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-			bool opened = ImGui::TreeNodeEx((void*)9817239, flags, name.c_str());
-			if (opened) { ImGui::TreePop(); }
+			// add child nodes here
 			ImGui::TreePop();
 		}
 	}

@@ -29,6 +29,7 @@ namespace prime {
 		void Viewport();
 
 		void ResizeViewport();
+		void DarkTheme();
 
 	private:
 		Ref<Scene> m_scene;
