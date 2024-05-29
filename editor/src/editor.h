@@ -19,7 +19,7 @@ namespace prime {
 		{
 			Config config;
 			config.fullScreen = false;
-			config.title = "Prime Editor";
+			config.title = "Prime Editor - Untitled";
 			config.vSync = true;
 			config.width = 1000;
 			config.height = 600;
@@ -33,6 +33,11 @@ namespace prime {
 
 		void ResizeViewport();
 		void DarkTheme();
+
+		void MenuBar();
+		std::string GetNameFromPath(const std::string& path);
+
+		void SaveSceneAs();
 
 	private:
 		Ref<Scene> m_scene;

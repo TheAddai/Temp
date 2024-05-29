@@ -79,6 +79,8 @@ namespace prime {
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 
+		MenuBar();
+
 		ImGui::End();
 	}
 	
@@ -141,5 +143,69 @@ namespace prime {
 		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	}
+	
+	void Editor::MenuBar()
+	{
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+				{
+
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+				{
+					SaveSceneAs();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Exit"))
+				{
+
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
+		}
+	}
+
+	std::string Editor::GetNameFromPath(const std::string& path)
+	{
+		auto lastSlash = path.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = path.rfind('.');
+		auto count = lastDot == std::string::npos ? path.size() - lastSlash : lastDot - lastSlash;
+
+		return path.substr(lastSlash, count);
+	}
+
+	void Editor::SaveSceneAs()
+	{
+		std::string filepath = FileDialog::SaveFile("Prime Scene (*.prime)\0*.prime\0");
+		if (!filepath.empty())
+		{
+			std::string name = GetNameFromPath(filepath);
+			FileSystem::SaveScene(m_scene, filepath, name);
+			std::string title = "Prime Engine - " + name;
+			Engine::SetTitle(title.c_str());
+		}
 	}
 }

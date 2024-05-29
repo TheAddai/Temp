@@ -122,6 +122,12 @@ namespace prime {
 		else { glfwSwapInterval(0); }
 		m_data.vSync = enable;
 	}
+
+	void Platform::SetTitle(const char* title)
+	{
+		m_data.title = title;
+		glfwSetWindowTitle((GLFWwindow*)m_windowHandle, title);
+	}
 }
 
 #endif // P_WINDOWS

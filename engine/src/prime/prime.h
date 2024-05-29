@@ -7,6 +7,8 @@
 #include "core/dispatcher.h"
 #include "core/engine.h"
 #include "core/events.h"
+#include "core/file_dialog.h"
+#include "core/file_system.h"
 #include "core/game.h"
 #include "core/key.h"
 #include "core/logger.h"

@@ -29,5 +29,6 @@ namespace prime {
 		friend class Entity;
 		friend class Renderer;
 		friend class SceneHeirarchy;
+		friend class FileSystem;
 	};
 }

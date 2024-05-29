@@ -33,12 +33,14 @@ project "engine"
         "%{includeDirs.glad}",
         "%{includeDirs.glm}",
         "%{includeDirs.entt}",
-        "%{includeDirs.imgui}"
+        "%{includeDirs.imgui}",
+        "%{includeDirs.yaml}"
     }
 
     links
     {
         "glfw",
         "glad",
-        "imgui"
+        "imgui",
+        "yaml"
     }
