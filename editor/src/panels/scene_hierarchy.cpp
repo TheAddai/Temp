@@ -27,6 +27,18 @@ namespace prime {
 				Entity entity{ id , m_scene.get()};
 				DrawEntityNode(entity);
 			}
+
+			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+				m_selectedEntity = {};
+
+			// Right-click on blank space
+			if (ImGui::BeginPopupContextWindow(0, 1, false))
+			{
+				if (ImGui::MenuItem("Create Entity"))
+					m_scene->CreateEntity("Empty Entity");
+
+				ImGui::EndPopup();
+			}
 		}
 
 		ImGui::End();
@@ -44,10 +56,26 @@ namespace prime {
 			m_selectedEntity = entity;
 		}
 
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+				entityDeleted = true;
+
+			ImGui::EndPopup();
+		}
+
 		if (opened)
 		{
 			// add child nodes here
 			ImGui::TreePop();
+		}
+
+		if (entityDeleted)
+		{
+			m_scene->DestroyEntity(entity);
+			if (m_selectedEntity == entity)
+				m_selectedEntity = {};
 		}
 	}
 }
