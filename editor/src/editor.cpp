@@ -57,6 +57,7 @@ namespace prime {
 	{
 		Dockspace();
 		m_sceneHeirarchy.ImGuiRender();
+		m_properties.ImGuiRender(m_sceneHeirarchy.GetSelectedEntity());
 		Viewport();
 	}
 	

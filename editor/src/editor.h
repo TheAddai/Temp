@@ -2,6 +2,7 @@
 
 #include "prime/prime.h"
 #include "panels/scene_hierarchy.h"
+#include "panels/properties.h"
 
 namespace prime {
 
@@ -38,5 +39,6 @@ namespace prime {
 
 		// panels
 		SceneHeirarchy m_sceneHeirarchy;
+		Properties m_properties;
 	};
 }
