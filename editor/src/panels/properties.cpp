@@ -1,6 +1,7 @@
 
 #include "properties.h"
 #include "prime/scene/components.h"
+#include "UI.h"
 
 #include <imgui/imgui.h>
 
@@ -27,6 +28,18 @@ namespace prime {
 		if (m_selection)
 		{
 			DrawNameComponent();
+
+			DrawComponent<TransformComponent>("Transform", entity, false, [](auto& component)
+				{
+					f32 columnWidth = 70.0f;
+					DrawVec2Control("Position", component.position, 0.0f, columnWidth);
+					DrawVec2Control("Scale", component.scale, 1.0f, columnWidth);
+
+					f32 rotation = glm::degrees(component.rotation);
+					DrawfloatControl("Rotation", rotation, 0.0f, columnWidth);
+					component.rotation = glm::radians(rotation);
+				});
+
 			DrawAddComponentButton();
 		}
 		ImGui::End();

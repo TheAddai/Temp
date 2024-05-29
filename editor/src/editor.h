@@ -21,6 +21,8 @@ namespace prime {
 			config.fullScreen = false;
 			config.title = "Prime Editor";
 			config.vSync = true;
+			config.width = 1000;
+			config.height = 600;
 
 			return config;
 		}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "prime/scene/entity.h"
+#include "prime/scene/components.h"
 
 namespace prime {
 
