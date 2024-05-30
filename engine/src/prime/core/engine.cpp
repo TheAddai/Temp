@@ -16,7 +16,7 @@ namespace prime {
 
 	static void OnWindowClose(const WindowCloseEvent&)
 	{
-		s_running = false;
+		Engine::Exit();
 	}
 
 	static void OnWindowResize(const WindowResizeEvent& e)
@@ -75,5 +75,10 @@ namespace prime {
 		s_platform.Shutdown();
 		Dispatcher::Get().clear();
 		Logger::Shutdown();
+	}
+
+	void Engine::Exit()
+	{
+		s_running = false;
 	}
 }

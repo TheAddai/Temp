@@ -17,6 +17,8 @@ namespace prime {
 		static void SetTitle(const std::string& title) { s_platform.SetTitle(title); }
 		static std::string GetTitle() { return s_platform.GetTitle(); }
 
+		static void Exit();
+
 	private:
 		static Platform s_platform;
 	};

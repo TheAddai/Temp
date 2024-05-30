@@ -39,11 +39,17 @@ namespace prime {
 
 		void SaveSceneAs();
 		void OpenScene();
+		void NewScene();
+		void SaveScene();
+
+		void OnKeyPressed(const KeyPressedEvent& e);
+		void SetShourcus(Key key);
 
 	private:
 		Ref<Scene> m_scene;
 		Ref<Framebuffer> m_frameBuffer;
 		glm::vec2 m_viewportSize = glm::vec2(0.0f);
+		std::string m_sceneSavePath = "";
 
 		// panels
 		SceneHeirarchy m_sceneHeirarchy;

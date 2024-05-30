@@ -18,6 +18,8 @@ namespace prime {
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
 		m_sceneHeirarchy.SetScene(m_scene);
+
+		Dispatcher::Get().sink<KeyPressedEvent>().connect<&Editor::OnKeyPressed>(this);
 	}
 
 	void Editor::Shutdown()
@@ -160,12 +162,12 @@ namespace prime {
 
 				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 				{
-
+					NewScene();
 				}
 
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 				{
-
+					SaveScene();
 				}
 
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
@@ -177,7 +179,7 @@ namespace prime {
 
 				if (ImGui::MenuItem("Exit"))
 				{
-
+					Engine::Exit();
 				}
 
 				ImGui::EndMenu();
@@ -206,6 +208,7 @@ namespace prime {
 			FileSystem::SaveScene(m_scene, filepath, name);
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
+			m_sceneSavePath = filepath;
 		}
 	}
 
@@ -217,6 +220,66 @@ namespace prime {
 		{
 			m_scene = newScene;
 			m_sceneHeirarchy.SetScene(m_scene);
+			m_sceneSavePath = filepath;
+		}
+	}
+	
+	void Editor::NewScene()
+	{
+		m_scene = Scene::Create();
+		m_sceneHeirarchy.SetScene(m_scene);
+		m_sceneSavePath = "";
+	}
+	
+	void Editor::SaveScene()
+	{
+		if (!m_sceneSavePath.empty())
+		{
+			std::string name = GetNameFromPath(m_sceneSavePath);
+			FileSystem::SaveScene(m_scene, m_sceneSavePath, name);
+			std::string title = "Prime Engine - " + name;
+			Engine::SetTitle(title);
+		}
+		else
+		{
+			SaveSceneAs();
+		}
+	}
+
+	void Editor::OnKeyPressed(const KeyPressedEvent& e)
+	{
+		if (e.GetRepeat()) { return; }
+		SetShourcus(e.GetKey());
+	}
+
+	void Editor::SetShourcus(Key key)
+	{
+		bool control = Input::IsKeyPressed(Key::keyLeftControl) || Input::IsKeyPressed(Key::keyLeftControl);
+		bool shift = Input::IsKeyPressed(Key::keyLeftShift) || Input::IsKeyPressed(Key::keyRightShift);
+
+		switch (key)
+		{
+		case Key::keyN:
+		{
+			if (control) { NewScene(); break; }
+		}
+
+		case Key::keyO:
+		{
+			if (control) { OpenScene(); break; }
+		}
+
+		case Key::keyS:
+		{
+			if (control)
+			{
+				if (shift) { SaveSceneAs(); }
+				else { SaveScene(); }
+				break;
+			}
+
+		}
+
 		}
 	}
 }
