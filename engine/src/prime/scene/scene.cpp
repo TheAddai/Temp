@@ -19,8 +19,12 @@ namespace prime {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
-		Guid guid = Guid();
-		Entity entity = Entity(m_registry.create(), this);
+		return CreateEntityWithGuid(Guid(), name);
+	}
+
+	Entity Scene::CreateEntityWithGuid(Guid guid, const std::string& name)
+	{
+		Entity entity = { m_registry.create(), this };
 		entity.AddComponent<IDComponent>(guid);
 		entity.AddComponent<TransformComponent>();
 		auto& nameC = entity.AddComponent<NameComponent>();

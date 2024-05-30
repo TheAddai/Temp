@@ -1,9 +1,42 @@
 Scene: level1
 Entities:
-  - Entity: 39344027998409596
+  - Entity: 13015426506009300707
     NameComponent:
-      Name: Empty Entity
+      Name: MainCamera
     TransformComponent:
       Position: [0, 0]
       Rotation: 0
       Scale: [1, 1]
+    CameraComponent:
+      Camera:
+        Size: 10
+        Near: -1
+        Far: 1
+      Primary: true
+  - Entity: 3854429988123614978
+    NameComponent:
+      Name: Red
+    TransformComponent:
+      Position: [-4, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [0.870967746, 0, 0, 1]
+  - Entity: 17802244252395424561
+    NameComponent:
+      Name: Green
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [0.25595355, 1, 0, 1]
+  - Entity: 16009735559558311682
+    NameComponent:
+      Name: Blue
+    TransformComponent:
+      Position: [4, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [0, 0.0322580338, 1, 1]

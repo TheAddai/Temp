@@ -127,7 +127,7 @@ namespace prime {
 		return out;
 	}
 
-	static void SerializeEntity(YAML::Emitter& out, Entity entity)
+	static void SaveEntity(YAML::Emitter& out, Entity entity)
 	{
 		P_ASSERT(entity.HasComponent<IDComponent>());
 
@@ -196,6 +196,59 @@ namespace prime {
 		out << YAML::EndMap; // Entity
 	}
 
+	static void LoadEntity(Ref<Scene>& scene, YAML::Node data)
+	{
+		YAML::Node entities = data["Entities"];
+		if (entities)
+		{
+			for (auto entity : entities)
+			{
+				// id component
+				ui64 uuid = entity["Entity"].as<ui64>();
+
+				// Name Component
+				std::string name;
+				auto nameComponent = entity["NameComponent"];
+				if (nameComponent) { name = nameComponent["Name"].as<std::string>(); }
+
+				Entity deserializedEntity = scene->CreateEntityWithGuid(uuid, name);
+
+				// Transform component
+				auto transformComponent = entity["TransformComponent"];
+				if (transformComponent)
+				{
+					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
+					tc.position = transformComponent["Position"].as<glm::vec2>();
+					tc.rotation = transformComponent["Rotation"].as<float>();
+					tc.scale = transformComponent["Scale"].as<glm::vec2>();
+				}
+
+				// Camera component
+				auto cameraComponent = entity["CameraComponent"];
+				if (cameraComponent)
+				{
+					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
+
+					auto& cameraProps = cameraComponent["Camera"];
+					cc.camera.SetSize(cameraProps["Size"].as<float>());
+					cc.camera.SetNearClip(cameraProps["Near"].as<float>());
+					cc.camera.SetFarClip(cameraProps["Far"].as<float>());
+
+					cc.primary = cameraComponent["Primary"].as<bool>();
+				}
+
+				// Sprite Component
+				auto spriteComponent = entity["SpriteComponent"];
+				if (spriteComponent)
+				{
+					auto& src = deserializedEntity.AddComponent<SpriteComponent>();
+					src.color = spriteComponent["Color"].as<glm::vec4>();
+				}
+
+			}
+		}
+	}
+
 	void FileSystem::SaveScene(Ref<Scene>& scene, const std::string& path, const std::string& name)
 	{
 		YAML::Emitter out;
@@ -204,11 +257,13 @@ namespace prime {
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
 		entt::basic_view entities = scene->m_registry.view<TransformComponent>();
+		ui64 maxEntities = entities.size() - 1;
 		for (entt::entity entityID : entities)
 		{
-			Entity entity = { entityID, scene.get() };
+			entt::entity id = (entt::entity)(maxEntities - (ui32)entityID);
+			Entity entity = { id, scene.get() };
 			if (!entity) { return; }
-			SerializeEntity(out, entity);
+			SaveEntity(out, entity);
 		}
 		
 		out << YAML::EndSeq;
@@ -216,5 +271,27 @@ namespace prime {
 
 		std::ofstream fout(path);
 		fout << out.c_str();
+	}
+
+	b8 FileSystem::LoadScene(Ref<Scene>& scene, const std::string& path)
+	{
+		YAML::Node data;
+		try
+		{
+			data = YAML::LoadFile(path);
+		}
+		catch (YAML::ParserException e)
+		{
+			P_ERROR("Failed to load .hazel file '{0}'\n {1}", path, e.what());
+			return false;
+		}
+
+		if (!data["Scene"])
+			return false;
+
+		std::string sceneName = data["Scene"].as<std::string>();
+		LoadEntity(scene, data);
+
+		return true;
 	}
 }

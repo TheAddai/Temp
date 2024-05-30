@@ -123,10 +123,10 @@ namespace prime {
 		m_data.vSync = enable;
 	}
 
-	void Platform::SetTitle(const char* title)
+	void Platform::SetTitle(const std::string& title)
 	{
 		m_data.title = title;
-		glfwSetWindowTitle((GLFWwindow*)m_windowHandle, title);
+		glfwSetWindowTitle((GLFWwindow*)m_windowHandle, title.c_str());
 	}
 }
 

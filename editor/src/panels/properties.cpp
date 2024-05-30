@@ -41,12 +41,12 @@ namespace prime {
 					component.rotation = glm::radians(rotation);
 				});
 
-			DrawComponent<SpriteComponent>("SpriteRenderer", entity, true, [](auto& component)
+			DrawComponent<SpriteComponent>("Sprite", entity, true, [](auto& component)
 				{
 					ImGui::ColorPicker4("##Color", glm::value_ptr(component.color));
 				});
 
-			DrawComponent<CameraComponent>("CameraComponent", entity, true, [](auto& component)
+			DrawComponent<CameraComponent>("Camera", entity, true, [](auto& component)
 				{
 					Camera& camera = component.camera;
 					ImGui::Checkbox("Primary", &component.primary);

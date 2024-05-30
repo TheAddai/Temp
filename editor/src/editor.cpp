@@ -151,9 +151,9 @@ namespace prime {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
 				{
-
+					OpenScene();
 				}
 
 				ImGui::Separator();
@@ -205,7 +205,18 @@ namespace prime {
 			std::string name = GetNameFromPath(filepath);
 			FileSystem::SaveScene(m_scene, filepath, name);
 			std::string title = "Prime Engine - " + name;
-			Engine::SetTitle(title.c_str());
+			Engine::SetTitle(title);
+		}
+	}
+
+	void Editor::OpenScene()
+	{
+		std::string filepath = FileDialog::OpenFile("Prime Scene (*.prime)\0*.prime\0");
+		Ref<Scene> newScene = Scene::Create();
+		if (FileSystem::LoadScene(newScene, filepath))
+		{
+			m_scene = newScene;
+			m_sceneHeirarchy.SetScene(m_scene);
 		}
 	}
 }

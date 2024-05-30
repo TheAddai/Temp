@@ -2,6 +2,7 @@
 
 #include "prime/core/defines.h"
 #include "prime/core/ref.h"
+#include "prime/core/guid.h"
 
 #include <entt/entt.hpp>
 #include <map>
@@ -18,6 +19,8 @@ namespace prime {
 		void Destroy();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		Entity CreateEntityWithGuid(Guid guid, const std::string& name);
+
 		void DestroyEntity(Entity& entity);
 
 		static Ref<Scene> Create();

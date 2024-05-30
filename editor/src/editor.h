@@ -38,6 +38,7 @@ namespace prime {
 		std::string GetNameFromPath(const std::string& path);
 
 		void SaveSceneAs();
+		void OpenScene();
 
 	private:
 		Ref<Scene> m_scene;

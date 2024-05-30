@@ -23,7 +23,8 @@ namespace prime {
 		void SetVSync(b8 enable);
 
 		b8 IsVSync() { return m_data.vSync; }
-		void SetTitle(const char* title);
+		void SetTitle(const std::string& title);
+		std::string GetTitle() { return m_data.title; }
 
 		void* GetWindowHandle() const { return m_windowHandle; }
 
