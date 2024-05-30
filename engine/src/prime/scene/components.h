@@ -3,6 +3,7 @@
 #include "prime/core/defines.h"
 #include "prime/core/guid.h"
 #include "camera.h"
+#include "prime/renderer/texture.h"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -42,6 +43,7 @@ namespace prime {
 
 	public:
 		glm::vec4 color = glm::vec4(1.0f);
+		Ref<Texture> texture;
 	};
 
 	struct CameraComponent

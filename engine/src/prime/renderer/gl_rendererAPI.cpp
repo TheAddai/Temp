@@ -183,6 +183,9 @@ namespace prime {
 		glBindBuffer(GL_UNIFORM_BUFFER, s_data.cameraUniformBuffer);
 		glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, s_data.cameraUniformBuffer);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void GLRendererAPI::Shutdown()
@@ -279,7 +282,7 @@ namespace prime {
 		glViewport(0, 0, width, height);
 	}
 
-	void GLRendererAPI::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
+	void GLRendererAPI::DrawQuad(Ref<Texture>& texture, const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
 	{
 		if (s_data.spriteIndexCount >= s_data.maxIndices)
 		{
@@ -287,12 +290,21 @@ namespace prime {
 			StartBatch();
 		}
 
+		if (s_data.textureSlotIndex > s_data.maxTextureSlots)
+		{
+			Flush();
+			StartBatch();
+		}
+
+		f32 textureIndex = 0.0f;
+		if (texture.get()) { textureIndex = GetTextureIndex(texture); }
+
 		glm::mat4 transform = GetTransform(position, scale, rotation);
 		for (auto i = 0; i < 4; i++)
 		{
 			s_data.spriteVertexBufferPtr->position = transform * s_data.vertexPositions[i];
 			s_data.spriteVertexBufferPtr->textureCoords = s_data.textureCoords[i];
-			s_data.spriteVertexBufferPtr->textureIndex = 0.0f;
+			s_data.spriteVertexBufferPtr->textureIndex = textureIndex;
 			s_data.spriteVertexBufferPtr->color = color;
 			s_data.spriteVertexBufferPtr++;
 		}
@@ -427,5 +439,26 @@ namespace prime {
 
 		// texture
 		s_data.textureSlotIndex = 1;
+	}
+	
+	f32 GLRendererAPI::GetTextureIndex(Ref<Texture>& texture)
+	{
+		f32 textureIndex = 0.0f;
+		for (ui32 i = 1; i < s_data.textureSlotIndex; i++)
+		{
+			if (*s_data.textureSlots[i] == *texture)
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = (f32)s_data.textureSlotIndex;
+			s_data.textureSlots[s_data.textureSlotIndex] = texture;
+			s_data.textureSlotIndex++;
+		}
+		return textureIndex;
 	}
 }

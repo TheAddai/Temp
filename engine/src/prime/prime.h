@@ -16,6 +16,7 @@
 #include "core/logger.h"
 #include "core/math.h"
 #include "core/ref.h"
+#include "core/resource_manager.h"
 
 // platform
 #include "platform/platform_detection.h"

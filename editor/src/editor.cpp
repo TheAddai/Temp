@@ -16,6 +16,10 @@ namespace prime {
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_scene = Scene::Create();
 
+		// TEMP
+		Entity entity = m_scene->CreateEntity("Temp");
+		entity.AddComponent<SpriteComponent>().texture = ResourceManager::LoadTexture("assets/textures/blue.png");
+
 		m_frameBuffer = Framebuffer::Create(640, 480);
 		m_sceneHeirarchy.SetScene(m_scene);
 
@@ -236,6 +240,7 @@ namespace prime {
 		m_scene = Scene::Create();
 		m_sceneHeirarchy.SetScene(m_scene);
 		m_sceneSavePath = "";
+		Engine::SetTitle("Prime Engine - Untitled");
 	}
 	
 	void Editor::SaveScene()

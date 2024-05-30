@@ -4,6 +4,7 @@
 #include "prime/scene/entity.h"
 #include "prime/scene/components.h"
 #include "prime/core/assert.h"
+#include "prime/core/resource_manager.h"
 
 #include <fstream>
 #include <yaml-cpp/yaml.h>
@@ -190,6 +191,9 @@ namespace prime {
 			auto& spriteComponent = entity.GetComponent<SpriteComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteComponent.color;
 
+			if (spriteComponent.texture.get())
+				out << YAML::Key << "TexturePath" << YAML::Value << spriteComponent.texture->GetPath();
+
 			out << YAML::EndMap; // SpriteComponent
 		}
 
@@ -268,6 +272,12 @@ namespace prime {
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteComponent>();
 					src.color = spriteComponent["Color"].as<glm::vec4>();
+
+					if (spriteComponent["TexturePath"])
+					{
+						std::string texturePath = spriteComponent["TexturePath"].as<std::string>();
+						src.texture = ResourceManager::LoadTexture(texturePath);
+					}
 				}
 
 				// Line Component

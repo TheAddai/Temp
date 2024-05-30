@@ -35,7 +35,8 @@ project "engine"
         "%{includeDirs.entt}",
         "%{includeDirs.imgui}",
         "%{includeDirs.yaml}",
-        "%{includeDirs.box2d}"
+        "%{includeDirs.box2d}",
+        "%{includeDirs.stb}"
     }
 
     links

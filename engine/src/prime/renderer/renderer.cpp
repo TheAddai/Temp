@@ -116,7 +116,7 @@ namespace prime {
 		for (entt::entity sE : sEs)
 		{
 			auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
-			s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
+			s_rendererAPI->DrawQuad(s.texture, sT.position, sT.scale, s.color, sT.rotation);
 		}
 
 		// lines

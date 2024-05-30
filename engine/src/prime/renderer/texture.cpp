@@ -18,4 +18,15 @@ namespace prime {
 		}
 		return nullptr;
 	}
+
+	Ref<Texture> Texture::Create(const std::string& path)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case Renderer::API::openGL:
+			return CreateRef<GLTexture>(path);
+			break;
+		}
+		return nullptr;
+	}
 }
