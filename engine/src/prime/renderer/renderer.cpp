@@ -117,5 +117,12 @@ namespace prime {
 			auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
 			s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
 		}
+
+		entt::basic_view lEs = scene->m_registry.view<TransformComponent, LineComponent>();
+		for (entt::entity lE : lEs)
+		{
+			auto [lT, l] = lEs.get<TransformComponent, LineComponent>(lE);
+			s_rendererAPI->DrawLine(lT.position, l.endPosition, l.color);
+		}
 	}
 }

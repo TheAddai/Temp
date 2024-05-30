@@ -43,7 +43,7 @@ namespace prime {
 
 			DrawComponent<SpriteComponent>("Sprite", entity, true, [](auto& component)
 				{
-					ImGui::ColorPicker4("##Color", glm::value_ptr(component.color));
+					ImGui::ColorPicker4("##SpriteColor", glm::value_ptr(component.color));
 				});
 
 			DrawComponent<CameraComponent>("Camera", entity, true, [](auto& component)
@@ -62,6 +62,13 @@ namespace prime {
 					float orthoFar = camera.GetFarClip();
 					if (ImGui::DragFloat("Far", &orthoFar))
 						camera.SetFarClip(orthoFar);
+				});
+
+			DrawComponent<LineComponent>("Line", entity, true, [](auto& component)
+				{
+					DrawVec2Control("End", component.endPosition, 1.0f, 70.0f);
+					ImGui::NewLine();
+					ImGui::ColorPicker4("##LineColor", glm::value_ptr(component.color));
 				});
 
 			DrawAddComponentButton();
@@ -95,6 +102,7 @@ namespace prime {
 		{
 			DisplayAddComponentEntry<SpriteComponent>(m_selection, "Sprite Renderer");
 			DisplayAddComponentEntry<CameraComponent>(m_selection, "Camera");
+			DisplayAddComponentEntry<LineComponent>(m_selection, "Line");
 			ImGui::EndPopup();
 		}
 	}

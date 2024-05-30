@@ -23,6 +23,12 @@ namespace prime {
 		glm::vec4 color = glm::vec4(1.0f);
 	};
 
+	struct LineVertex
+	{
+		glm::vec2 position = glm::vec2(0.0f);
+		glm::vec4 color = glm::vec4(1.0f);
+	};
+
 	struct Data
 	{
 		ui32 maxSprites = 0, maxVertices = 0, maxIndices = 0;
@@ -36,6 +42,13 @@ namespace prime {
 		SpriteVertex* spriteVertexBufferPtr = nullptr;
 		SpriteVertex* spriteVertexBufferBase = nullptr;
 		ui32 spriteIndexCount = 0;
+
+		// line
+		ui32 lineVertexArray = 0, lineVertexBuffer = 0;
+		ui32 lineVertexShader = 0, lineFragmentShader = 0, lineShaderProgram = 0;
+		LineVertex* lineVertexBufferPtr = nullptr;
+		LineVertex* lineVertexBufferBase = nullptr;
+		ui32 lineVertexCount = 0;
 	};
 
 	static Data s_data;
@@ -146,6 +159,7 @@ namespace prime {
 		s_data.vertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
 		InitSpriteRendering();
+		InitLineRendering();
 
 		glGenBuffers(1, &s_data.cameraUniformBuffer);
 		glBindBuffer(GL_UNIFORM_BUFFER, s_data.cameraUniformBuffer);
@@ -166,6 +180,17 @@ namespace prime {
 		glDeleteProgram(s_data.spriteShaderProgram);
 		glDeleteShader(s_data.spriteVertexShader);
 		glDeleteShader(s_data.spriteFragmentShader);
+
+		// sprite
+		delete[] s_data.lineVertexBufferBase;
+		glDeleteBuffers(1, &s_data.lineVertexBuffer);
+		glDeleteVertexArrays(1, &s_data.lineVertexArray);
+
+		glDetachShader(s_data.lineShaderProgram, s_data.lineVertexShader);
+		glDetachShader(s_data.lineShaderProgram, s_data.lineFragmentShader);
+		glDeleteProgram(s_data.lineShaderProgram);
+		glDeleteShader(s_data.lineVertexShader);
+		glDeleteShader(s_data.lineFragmentShader);
 
 		glDeleteBuffers(1, &s_data.cameraUniformBuffer);
 	}
@@ -198,6 +223,17 @@ namespace prime {
 			glUseProgram(s_data.spriteShaderProgram);
 			glBindVertexArray(s_data.spriteVertexArray);
 			glDrawElements(GL_TRIANGLES, s_data.spriteIndexCount, GL_UNSIGNED_INT, nullptr);
+		}
+
+		if (s_data.lineVertexCount)
+		{
+			i64 lineDataSize = (ui8*)s_data.lineVertexBufferPtr - (ui8*)s_data.lineVertexBufferBase;
+			glBindBuffer(GL_ARRAY_BUFFER, s_data.lineVertexBuffer);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, (ui32)lineDataSize, s_data.lineVertexBufferBase);
+
+			glUseProgram(s_data.lineShaderProgram);
+			glBindVertexArray(s_data.lineVertexArray);
+			glDrawArrays(GL_LINES, 0, s_data.lineVertexCount);
 		}
 	}
 
@@ -235,6 +271,25 @@ namespace prime {
 			s_data.spriteVertexBufferPtr++;
 		}
 		s_data.spriteIndexCount += 6;
+	}
+
+	void GLRendererAPI::DrawLine(const glm::vec2& point, const glm::vec2& point2, const glm::vec4& color)
+	{
+		if (s_data.spriteIndexCount >= s_data.maxIndices)
+		{
+			Flush();
+			StartBatch();
+		}
+
+		s_data.lineVertexBufferPtr->position = { point.x, point.y};
+		s_data.lineVertexBufferPtr->color = color;
+		s_data.lineVertexBufferPtr++;
+
+		s_data.lineVertexBufferPtr->position = { point2.x, point2.y};
+		s_data.lineVertexBufferPtr->color = color;
+		s_data.lineVertexBufferPtr++;
+
+		s_data.lineVertexCount += 2;
 	}
 	
 	void GLRendererAPI::InitSpriteRendering()
@@ -277,11 +332,38 @@ namespace prime {
 		s_data.spriteFragmentShader = CompileShader(s_spritePixelShaderSource, GL_FRAGMENT_SHADER);
 		s_data.spriteShaderProgram = GenerateProgram(s_data.spriteVertexShader, s_data.spriteFragmentShader);
 	}
+
+	void GLRendererAPI::InitLineRendering()
+	{
+		glGenVertexArrays(1, &s_data.lineVertexArray);
+		glBindVertexArray(s_data.lineVertexArray);
+
+		glGenBuffers(1, &s_data.lineVertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, s_data.lineVertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, s_data.maxVertices * sizeof(LineVertex), nullptr, GL_DYNAMIC_DRAW);
+		s_data.lineVertexBufferBase = new LineVertex[s_data.maxVertices];
+
+		VertexLayout lineLayout;
+		lineLayout.AddVertex(Vertex(VertexType::position, "a_position"));
+		lineLayout.AddVertex(Vertex(VertexType::color, "a_color"));
+		SubmitDataToGPU(lineLayout);
+
+		s_data.lineVertexShader = CompileShader(s_lineVertexShaderSource, GL_VERTEX_SHADER);
+		s_data.lineFragmentShader = CompileShader(s_linePixelShaderSource, GL_FRAGMENT_SHADER);
+		s_data.lineShaderProgram = GenerateProgram(s_data.lineVertexShader, s_data.lineFragmentShader);
+
+		glEnable(GL_LINE_SMOOTH);
+		glLineWidth(2.0f);
+	}
 	
 	void GLRendererAPI::StartBatch()
 	{
 		// sprite
 		s_data.spriteIndexCount = 0;
 		s_data.spriteVertexBufferPtr = s_data.spriteVertexBufferBase;
+
+		// line
+		s_data.lineVertexCount = 0;
+		s_data.lineVertexBufferPtr = s_data.lineVertexBufferBase;
 	}
 }

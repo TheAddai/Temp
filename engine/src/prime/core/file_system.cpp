@@ -193,6 +193,19 @@ namespace prime {
 			out << YAML::EndMap; // SpriteComponent
 		}
 
+		// line component
+		if (entity.HasComponent<LineComponent>())
+		{
+			out << YAML::Key << "LineComponent";
+			out << YAML::BeginMap; // LineComponent
+
+			auto& lineComponent = entity.GetComponent<LineComponent>();
+			out << YAML::Key << "Color" << YAML::Value << lineComponent.color;
+			out << YAML::Key << "End" << YAML::Value << lineComponent.endPosition;
+
+			out << YAML::EndMap; // LineComponent
+		}
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -243,6 +256,15 @@ namespace prime {
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteComponent>();
 					src.color = spriteComponent["Color"].as<glm::vec4>();
+				}
+
+				// Line Component
+				auto lineComponent = entity["LineComponent"];
+				if (lineComponent)
+				{
+					auto& lc = deserializedEntity.AddComponent<LineComponent>();
+					lc.color = lineComponent["Color"].as<glm::vec4>();
+					lc.endPosition = lineComponent["End"].as<glm::vec2>();
 				}
 
 			}

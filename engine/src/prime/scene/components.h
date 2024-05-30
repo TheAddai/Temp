@@ -63,4 +63,15 @@ namespace prime {
 		NameComponent(const std::string& name)
 			: name(name) {}
 	};
+
+	class LineComponent
+	{
+	public:
+		LineComponent() = default;
+		LineComponent(const LineComponent&) = default;
+
+	public:
+		glm::vec2  endPosition = glm::vec2(1.0f, 0.0f);
+		glm::vec4 color = glm::vec4(1.0f);
+	};
 }
