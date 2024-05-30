@@ -53,10 +53,8 @@ namespace prime {
 		s_rendererAPI->SetViewport(width, height);
 	}
 
-	void Renderer::DrawScene(Ref<Scene>& scene)
+	void Renderer::DrawSceneRuntime(Ref<Scene>& scene)
 	{
-		s_rendererAPI->Clear();
-
 		glm::mat4 cM = glm::mat4(1.0f);
 		Camera* mainCamera = nullptr;
 
@@ -76,17 +74,18 @@ namespace prime {
 		if (mainCamera)
 		{
 			glm::mat4 projection = mainCamera->GetProjection() * cM;
+
 			s_rendererAPI->BeginDrawing(projection);
-
-			entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();
-			for (entt::entity sE : sEs)
-			{
-				auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
-				s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
-			}
-
+			Draw(scene);
 			s_rendererAPI->EndDrawing();
 		}
+	}
+
+	void Renderer::DrawSceneEditor(Ref<Scene>& scene, EditorCamera& camera)
+	{
+		s_rendererAPI->BeginDrawing(camera.GetViewProjectionMatrix());
+		Draw(scene);
+		s_rendererAPI->EndDrawing();
 	}
 
 	void Renderer::Init(void* windowHandle)
@@ -106,5 +105,17 @@ namespace prime {
 	void Renderer::SwapBuffers()
 	{
 		s_rendererAPI->SwapBuffers(s_windowHandle);
+	}
+	
+	void Renderer::Draw(Ref<Scene>& scene)
+	{
+		s_rendererAPI->Clear();
+
+		entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();
+		for (entt::entity sE : sEs)
+		{
+			auto [sT, s] = sEs.get<TransformComponent, SpriteComponent>(sE);
+			s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
+		}
 	}
 }

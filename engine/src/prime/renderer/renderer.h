@@ -2,6 +2,7 @@
 
 #include "prime/core/defines.h"
 #include "prime/core/ref.h"
+#include "prime/renderer/editor_camera.h"
 
 #include <glm/glm.hpp>
 
@@ -27,7 +28,9 @@ namespace prime {
 
 
 		static void SetViewport(ui32 width, ui32 height);
-		static void DrawScene(Ref<Scene>& scene);
+
+		static void DrawSceneRuntime(Ref<Scene>& scene);
+		static void DrawSceneEditor(Ref<Scene>& scene, EditorCamera& camera);
 
 		static API GetAPI() { return s_API; }
 		static Config GetConfig() { return s_config; }
@@ -36,6 +39,8 @@ namespace prime {
 		static void Init(void* windowHandle);
 		static void Shutdown();
 		static void SwapBuffers();
+
+		static void Draw(Ref<Scene>& scene);
 
 	private:
 		static API s_API;

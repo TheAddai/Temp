@@ -257,11 +257,9 @@ namespace prime {
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
 		entt::basic_view entities = scene->m_registry.view<TransformComponent>();
-		ui64 maxEntities = entities.size() - 1;
 		for (entt::entity entityID : entities)
 		{
-			entt::entity id = (entt::entity)(maxEntities - (ui32)entityID);
-			Entity entity = { id, scene.get() };
+			Entity entity = { entityID, scene.get() };
 			if (!entity) { return; }
 			SaveEntity(out, entity);
 		}
@@ -276,22 +274,17 @@ namespace prime {
 	b8 FileSystem::LoadScene(Ref<Scene>& scene, const std::string& path)
 	{
 		YAML::Node data;
-		try
+		if (!path.empty())
 		{
 			data = YAML::LoadFile(path);
+
+			if (!data["Scene"]) { return false; }
+
+			std::string sceneName = data["Scene"].as<std::string>();
+
+			LoadEntity(scene, data);
+			return true;
 		}
-		catch (YAML::ParserException e)
-		{
-			P_ERROR("Failed to load .hazel file '{0}'\n {1}", path, e.what());
-			return false;
-		}
-
-		if (!data["Scene"])
-			return false;
-
-		std::string sceneName = data["Scene"].as<std::string>();
-		LoadEntity(scene, data);
-
-		return true;
+		return false;
 	}
 }

@@ -19,12 +19,9 @@ namespace prime {
 		if (m_scene)
 		{
 			entt::basic_view entities = m_scene->m_registry.view<TransformComponent>();
-			ui64 maxEntities = entities.size() - 1;
-
 			for (entt::entity entityID : entities)
 			{
-				entt::entity id = (entt::entity)(maxEntities - (ui32)entityID);
-				Entity entity{ id , m_scene.get()};
+				Entity entity{ entityID , m_scene.get()};
 				DrawEntityNode(entity);
 			}
 

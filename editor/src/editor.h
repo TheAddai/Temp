@@ -51,6 +51,8 @@ namespace prime {
 		glm::vec2 m_viewportSize = glm::vec2(0.0f);
 		std::string m_sceneSavePath = "";
 
+		EditorCamera m_editorCamera;
+
 		// panels
 		SceneHeirarchy m_sceneHeirarchy;
 		Properties m_properties;

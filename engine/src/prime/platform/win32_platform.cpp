@@ -83,7 +83,7 @@ namespace prime {
 
 		glfwSetCursorPosCallback(windowHandle, [](GLFWwindow* window, double xPos, double yPos)
 			{
-				Dispatcher::Get().enqueue<MouseScrolledEvent>((f32)xPos, (f32)yPos);
+				Dispatcher::Get().enqueue<MouseMovedEvent>((f32)xPos, (f32)yPos);
 			});
 	}
 

@@ -20,6 +20,7 @@ namespace prime {
 		m_sceneHeirarchy.SetScene(m_scene);
 
 		Dispatcher::Get().sink<KeyPressedEvent>().connect<&Editor::OnKeyPressed>(this);
+		m_editorCamera.SubscribeToEvent();
 	}
 
 	void Editor::Shutdown()
@@ -31,8 +32,10 @@ namespace prime {
 	{
 		ResizeViewport();
 
+		m_editorCamera.Update();
+
 		m_frameBuffer->Bind();
-		Renderer::DrawScene(m_scene);
+		Renderer::DrawSceneEditor(m_scene, m_editorCamera);
 		m_frameBuffer->Unbind();
 	}
 
@@ -218,8 +221,12 @@ namespace prime {
 		Ref<Scene> newScene = Scene::Create();
 		if (FileSystem::LoadScene(newScene, filepath))
 		{
+			std::string name = GetNameFromPath(filepath);
 			m_scene = newScene;
 			m_sceneHeirarchy.SetScene(m_scene);
+
+			std::string title = "Prime Engine - " + name;
+			Engine::SetTitle(title);
 			m_sceneSavePath = filepath;
 		}
 	}
