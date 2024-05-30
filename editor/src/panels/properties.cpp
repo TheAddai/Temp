@@ -71,6 +71,11 @@ namespace prime {
 					ImGui::ColorPicker4("##LineColor", glm::value_ptr(component.color));
 				});
 
+			DrawComponent<RectComponent>("Rect", entity, true, [](auto& component)
+				{
+					ImGui::ColorPicker4("##RectColor", glm::value_ptr(component.color));
+				});
+
 			DrawAddComponentButton();
 		}
 		ImGui::End();
@@ -103,6 +108,7 @@ namespace prime {
 			DisplayAddComponentEntry<SpriteComponent>(m_selection, "Sprite Renderer");
 			DisplayAddComponentEntry<CameraComponent>(m_selection, "Camera");
 			DisplayAddComponentEntry<LineComponent>(m_selection, "Line");
+			DisplayAddComponentEntry<RectComponent>(m_selection, "Rect");
 			ImGui::EndPopup();
 		}
 	}

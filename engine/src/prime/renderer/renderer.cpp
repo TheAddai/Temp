@@ -111,6 +111,7 @@ namespace prime {
 	{
 		s_rendererAPI->Clear();
 
+		// sprites
 		entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();
 		for (entt::entity sE : sEs)
 		{
@@ -118,11 +119,20 @@ namespace prime {
 			s_rendererAPI->DrawQuad(sT.position, sT.scale, s.color, sT.rotation);
 		}
 
+		// lines
 		entt::basic_view lEs = scene->m_registry.view<TransformComponent, LineComponent>();
 		for (entt::entity lE : lEs)
 		{
 			auto [lT, l] = lEs.get<TransformComponent, LineComponent>(lE);
 			s_rendererAPI->DrawLine(lT.position, l.endPosition, l.color);
+		}
+
+		// rect
+		entt::basic_view rEs = scene->m_registry.view<TransformComponent, RectComponent>();
+		for (entt::entity rE : rEs)
+		{
+			auto [eT, r] = rEs.get<TransformComponent, RectComponent>(rE);
+			s_rendererAPI->DrawRect(eT.position, eT.scale, r.color, eT.rotation);
 		}
 	}
 }

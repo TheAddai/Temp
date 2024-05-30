@@ -24,5 +24,6 @@ namespace prime {
 
 		virtual void DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation) = 0;
 		virtual void DrawLine(const glm::vec2& point, const glm::vec2& point2, const glm::vec4& color) = 0;
+		virtual void DrawRect(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation) = 0;
 	};
 }

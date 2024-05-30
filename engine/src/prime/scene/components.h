@@ -74,4 +74,15 @@ namespace prime {
 		glm::vec2  endPosition = glm::vec2(1.0f, 0.0f);
 		glm::vec4 color = glm::vec4(1.0f);
 	};
+
+	class RectComponent
+	{
+	public:
+		RectComponent() = default;
+		RectComponent(const RectComponent&) = default;
+		RectComponent(const glm::vec4& color) : color(color) {}
+
+	public:
+		glm::vec4 color = glm::vec4(1.0f);
+	};
 }
