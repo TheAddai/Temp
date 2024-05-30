@@ -61,6 +61,8 @@ namespace prime {
 			return !(*this == other);
 		}
 
+		entt::entity GetID() const { return m_handle; }
+
 	private:
 		entt::entity m_handle = entt::null;
 		Scene* m_scene = nullptr;

@@ -22,6 +22,7 @@ namespace prime {
 		Entity CreateEntityWithGuid(Guid guid, const std::string& name);
 
 		void DestroyEntity(Entity& entity);
+		Entity DuplicateEntity(Entity entity);
 
 		static Ref<Scene> Create();
 

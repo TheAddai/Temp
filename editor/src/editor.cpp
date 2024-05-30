@@ -223,7 +223,7 @@ namespace prime {
 		{
 			std::string name = GetNameFromPath(filepath);
 			m_scene = newScene;
-			m_sceneHeirarchy.SetScene(m_scene);
+			m_sceneHeirarchy.SetScene(m_scene, true);
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -268,12 +268,14 @@ namespace prime {
 		{
 		case Key::keyN:
 		{
-			if (control) { NewScene(); break; }
+			if (control) { NewScene(); }
+			break;
 		}
 
 		case Key::keyO:
 		{
-			if (control) { OpenScene(); break; }
+			if (control) { OpenScene(); }
+			break;
 		}
 
 		case Key::keyS:
@@ -282,9 +284,14 @@ namespace prime {
 			{
 				if (shift) { SaveSceneAs(); }
 				else { SaveScene(); }
-				break;
 			}
+			break;
+		}
 
+		case Key::keyD:
+		{
+			if (control) { m_scene->DuplicateEntity(m_sceneHeirarchy.GetSelectedEntity()); }
+			break;
 		}
 
 		}

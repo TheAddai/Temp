@@ -6,8 +6,10 @@
 
 namespace prime {
 
-	void SceneHeirarchy::SetScene(Ref<Scene>& scene)
+	void SceneHeirarchy::SetScene(Ref<Scene>& scene, b8 loaded)
 	{
+		m_sceneLoaded = loaded;
+		m_entities.clear();
 		m_scene = scene;
 		m_selectedEntity = {};
 	}
@@ -18,12 +20,34 @@ namespace prime {
 
 		if (m_scene)
 		{
+			m_entities.clear();
+
 			entt::basic_view entities = m_scene->m_registry.view<TransformComponent>();
 			for (entt::entity entityID : entities)
 			{
-				Entity entity{ entityID , m_scene.get()};
-				DrawEntityNode(entity);
+				Entity entity{ entityID, m_scene.get()};
+				m_entities.push_back(entity);
 			}
+
+			if (m_sceneLoaded)
+			{
+				for (auto entity : m_entities)
+				{
+					DrawEntityNode(entity);
+				}
+			}
+			else if (!m_sceneLoaded)
+			{
+				// draw entities in reverse
+			    for (auto it = m_entities.rbegin(); it != m_entities.rend(); ++it)
+			    {
+				    DrawEntityNode(*it);
+			    }
+			}
+
+			
+
+			
 
 			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 				m_selectedEntity = {};
@@ -47,17 +71,18 @@ namespace prime {
 
 		ImGuiTreeNodeFlags flags = ((m_selectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
-		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, name.c_str());
+		bool opened = ImGui::TreeNodeEx((void*)(ui64)(ui32)entity, flags, name.c_str());
 		if (ImGui::IsItemClicked())
 		{
 			m_selectedEntity = entity;
 		}
 
-		bool entityDeleted = false;
+		b8 entityDeleted = false;
+		b8 entityDuplicated = false;
 		if (ImGui::BeginPopupContextItem())
 		{
-			if (ImGui::MenuItem("Delete Entity"))
-				entityDeleted = true;
+			if (ImGui::MenuItem("Delete Entity")) { entityDeleted = true; }
+			if (ImGui::MenuItem("Duplicate Entity")) { entityDuplicated = true; }
 
 			ImGui::EndPopup();
 		}
@@ -73,6 +98,11 @@ namespace prime {
 			m_scene->DestroyEntity(entity);
 			if (m_selectedEntity == entity)
 				m_selectedEntity = {};
+		}
+
+		if (entityDuplicated)
+		{
+			m_scene->DuplicateEntity(entity);
 		}
 	}
 }

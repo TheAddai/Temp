@@ -105,7 +105,7 @@ namespace prime {
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
-			DisplayAddComponentEntry<SpriteComponent>(m_selection, "Sprite Renderer");
+			DisplayAddComponentEntry<SpriteComponent>(m_selection, "Sprite");
 			DisplayAddComponentEntry<CameraComponent>(m_selection, "Camera");
 			DisplayAddComponentEntry<LineComponent>(m_selection, "Line");
 			DisplayAddComponentEntry<RectComponent>(m_selection, "Rect");
