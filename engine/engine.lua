@@ -34,7 +34,8 @@ project "engine"
         "%{includeDirs.glm}",
         "%{includeDirs.entt}",
         "%{includeDirs.imgui}",
-        "%{includeDirs.yaml}"
+        "%{includeDirs.yaml}",
+        "%{includeDirs.box2d}"
     }
 
     links
@@ -42,5 +43,6 @@ project "engine"
         "glfw",
         "glad",
         "imgui",
-        "yaml"
+        "yaml",
+        "box2d"
     }

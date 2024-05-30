@@ -34,5 +34,6 @@ namespace prime {
 		friend class Renderer;
 		friend class SceneHeirarchy;
 		friend class FileSystem;
+		friend class PhysicsWorld;
 	};
 }

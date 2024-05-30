@@ -85,4 +85,36 @@ namespace prime {
 	public:
 		glm::vec4 color = glm::vec4(1.0f);
 	};
+
+	enum class BodyType
+	{ 
+		Static = 0, Dynamic, Kinematic
+	};
+
+	class RigidbodyComponent
+	{
+	public:
+		RigidbodyComponent() = default;
+		RigidbodyComponent(const RigidbodyComponent&) = default;
+
+	public:
+		BodyType type = BodyType::Static;
+		f32 density = 1.0f;
+		f32 friction = 0.5f;
+		f32 restitution = 0.0f;
+		f32 restitutionThreshold = 0.5f;
+		b8 fixedRotation = true;
+	};
+
+	class BoxColliderComponent
+	{
+	public:
+		BoxColliderComponent() = default;
+		BoxColliderComponent(const BoxColliderComponent&) = default;
+
+	public:
+		glm::vec2 size = { 1.0f, 1.0f };
+		glm::vec2 offset = { 0.0f, 0.0f };
+		b8 scaleWithTransform = true;
+	};
 }
