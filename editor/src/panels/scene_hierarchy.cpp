@@ -31,7 +31,7 @@ namespace prime {
 
 			if (m_sceneLoaded)
 			{
-				for (auto entity : m_entities)
+				for (Entity entity : m_entities)
 				{
 					DrawEntityNode(entity);
 				}

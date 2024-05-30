@@ -7,7 +7,9 @@
 enum class VertexType
 {
 	position,
-	color
+	color,
+	textureCoords,
+	textureIndex
 };
 
 static ui32 GetVertexTypeSize(VertexType vertexType)
@@ -20,6 +22,14 @@ static ui32 GetVertexTypeSize(VertexType vertexType)
 
 	case VertexType::color:
 		return 16;
+		break;
+
+	case VertexType::textureCoords:
+		return 8;
+		break;
+
+	case VertexType::textureIndex:
+		return 4;
 		break;
 	}
 	return 0;
@@ -35,6 +45,14 @@ static ui32 GetVertexTypeCount(VertexType vertexType)
 
 	case VertexType::color:
 		return 4;
+		break;
+
+	case VertexType::textureCoords:
+		return 2;
+		break;
+
+	case VertexType::textureIndex:
+		return 1;
 		break;
 	}
 	return 0;

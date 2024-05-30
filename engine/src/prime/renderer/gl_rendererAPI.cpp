@@ -10,6 +10,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <array>
 
 #ifdef P_WINDOWS
 #include <GLFW/glfw3.h>
@@ -21,6 +22,8 @@ namespace prime {
 	{
 		glm::vec2 position = glm::vec2(0.0f);
 		glm::vec4 color = glm::vec4(1.0f);
+		glm::vec2 textureCoords = glm::vec2(0.0f);
+		f32 textureIndex = 0.0f;
 	};
 
 	struct LineVertex
@@ -34,6 +37,12 @@ namespace prime {
 		ui32 maxSprites = 0, maxVertices = 0, maxIndices = 0;
 		glm::vec4 vertexPositions[4]{};
 		ui32 cameraUniformBuffer = 0;
+
+		// texture
+		ui32 textureSlotIndex = 1;
+		static const ui32 maxTextureSlots = 16;
+		glm::vec2 textureCoords[4]{};
+		std::array<Ref<Texture>, maxTextureSlots> textureSlots;
 
 		// sprite
 		ui32 spriteVertexArray = 0, spriteVertexBuffer = 0, spriteIndexBuffer = 0;
@@ -59,6 +68,8 @@ namespace prime {
 		{
 		case VertexType::position:
 		case VertexType::color:
+		case VertexType::textureCoords:
+		case VertexType::textureIndex:
 			return GL_FLOAT;
 			break;
 		}
@@ -158,6 +169,13 @@ namespace prime {
 		s_data.vertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
 		s_data.vertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
+		s_data.textureCoords[0] = { 0.0f, 0.0f };
+		s_data.textureCoords[1] = { 1.0f, 0.0f };
+		s_data.textureCoords[2] = { 1.0f, 1.0f };
+		s_data.textureCoords[3] = { 0.0f, 1.0f };
+
+		s_data.textureSlots[0] = Texture::Create(1, 1, TextureFilter::linear, TextureWrap::repeat);
+
 		InitSpriteRendering();
 		InitLineRendering();
 
@@ -220,6 +238,12 @@ namespace prime {
 			glBindBuffer(GL_ARRAY_BUFFER, s_data.spriteVertexBuffer);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, (ui32)spriteDataSize, s_data.spriteVertexBufferBase);
 
+			for (ui32 i = 0; i < s_data.textureSlotIndex; i++)
+			{
+				glActiveTexture(GL_TEXTURE0 + i);
+				glBindTexture(GL_TEXTURE_2D, s_data.textureSlots[i]->GetID());
+			}
+
 			glUseProgram(s_data.spriteShaderProgram);
 			glBindVertexArray(s_data.spriteVertexArray);
 			glDrawElements(GL_TRIANGLES, s_data.spriteIndexCount, GL_UNSIGNED_INT, nullptr);
@@ -267,6 +291,8 @@ namespace prime {
 		for (auto i = 0; i < 4; i++)
 		{
 			s_data.spriteVertexBufferPtr->position = transform * s_data.vertexPositions[i];
+			s_data.spriteVertexBufferPtr->textureCoords = s_data.textureCoords[i];
+			s_data.spriteVertexBufferPtr->textureIndex = 0.0f;
 			s_data.spriteVertexBufferPtr->color = color;
 			s_data.spriteVertexBufferPtr++;
 		}
@@ -328,6 +354,8 @@ namespace prime {
 		VertexLayout spriteLayout;
 		spriteLayout.AddVertex(Vertex(VertexType::position, "a_position"));
 		spriteLayout.AddVertex(Vertex(VertexType::color, "a_color"));
+		spriteLayout.AddVertex(Vertex(VertexType::textureCoords, "a_textureCoords"));
+		spriteLayout.AddVertex(Vertex(VertexType::textureIndex, "a_textureIndex"));
 		SubmitDataToGPU(spriteLayout);
 
 		// indices
@@ -354,6 +382,14 @@ namespace prime {
 		s_data.spriteVertexShader = CompileShader(s_spriteVertexShaderSource, GL_VERTEX_SHADER);
 		s_data.spriteFragmentShader = CompileShader(s_spritePixelShaderSource, GL_FRAGMENT_SHADER);
 		s_data.spriteShaderProgram = GenerateProgram(s_data.spriteVertexShader, s_data.spriteFragmentShader);
+
+		// texture
+		int32_t samplers[s_data.maxTextureSlots]{};
+		for (uint32_t i = 0; i < s_data.maxTextureSlots; i++) { samplers[i] = i; }
+
+		glUseProgram(s_data.spriteShaderProgram);
+		GLint location = glGetUniformLocation(s_data.spriteShaderProgram, "u_textures");
+		glUniform1iv(location, s_data.maxTextureSlots, samplers);
 	}
 
 	void GLRendererAPI::InitLineRendering()
@@ -388,5 +424,8 @@ namespace prime {
 		// line
 		s_data.lineVertexCount = 0;
 		s_data.lineVertexBufferPtr = s_data.lineVertexBufferBase;
+
+		// texture
+		s_data.textureSlotIndex = 1;
 	}
 }

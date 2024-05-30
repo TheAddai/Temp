@@ -23,6 +23,7 @@ namespace prime {
 		void SetViewport(ui32 width, ui32 height) override;
 
 		void DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation) override;
+
 		void DrawLine(const glm::vec2& point, const glm::vec2& point2, const glm::vec4& color) override;
 		void DrawRect(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation) override;
 
