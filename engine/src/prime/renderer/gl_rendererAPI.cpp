@@ -152,13 +152,18 @@ namespace prime {
 		return program;
 	}
 
-	void GLRendererAPI::Init(void* windowHandle)
+	void GLRendererAPI::Init(void* windowHandle, Renderer::Info& info)
 	{
 #ifdef P_WINDOWS
 		glfwMakeContextCurrent((GLFWwindow*)windowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		P_ASSERT_MSG(status, "Failed to initialize Glad!");
 #endif // P_WINDOWS
+
+		info.name = "OpenGL";
+		info.version = (const char*)glGetString(GL_VERSION);
+		info.vendor = (const char*)glGetString(GL_VENDOR);
+		info.card = (const char*)glGetString(GL_RENDERER);
 
 		s_data.maxSprites = Renderer::GetConfig().maxSprites;
 		s_data.maxVertices = s_data.maxSprites * 4;

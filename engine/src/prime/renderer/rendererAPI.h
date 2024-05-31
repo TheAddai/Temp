@@ -2,6 +2,7 @@
 
 #include "prime/core/defines.h"
 #include "texture.h"
+#include "renderer.h"
 
 #include <glm/glm.hpp>
 
@@ -10,7 +11,7 @@ namespace prime {
 	class RendererAPI
 	{
 	public:
-		virtual void Init(void* windowHandle) = 0;
+		virtual void Init(void* windowHandle, Renderer::Info& info) = 0;
 		virtual void Shutdown() = 0;
 
 		virtual void SetClearColor(const glm::vec4& color) = 0;

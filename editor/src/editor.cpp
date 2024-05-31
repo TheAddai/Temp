@@ -47,6 +47,7 @@ namespace prime {
 		m_sceneHeirarchy.ImGuiRender();
 		m_properties.ImGuiRender(m_sceneHeirarchy.GetSelectedEntity());
 		m_contextBrowser.OnImGuiRender();
+		m_rendererPanel.ImGuiRender();
 		Viewport();
 	}
 	

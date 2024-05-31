@@ -24,9 +24,14 @@ namespace prime {
 			openGL
 		};
 
+		struct Info
+		{
+			std::string name = "", version = "";
+			std::string vendor = "", card = "";
+		};
+
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
-
 
 		static void SetViewport(ui32 width, ui32 height);
 
@@ -36,7 +41,8 @@ namespace prime {
 		static Ref<Texture> GetDefaultTexture();
 
 		static API GetAPI() { return s_API; }
-		static Config GetConfig() { return s_config; }
+		static const Config GetConfig() { return s_config; }
+		static const Info GetInfo() { return s_info; }
 
 	private:
 		static void Init(void* windowHandle);
@@ -48,6 +54,7 @@ namespace prime {
 	private:
 		static API s_API;
 		static Config s_config;
+		static Info s_info;
 
 		friend class Engine;
 	};

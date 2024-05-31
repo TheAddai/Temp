@@ -9,7 +9,7 @@ namespace prime {
 	public:
 		GLRendererAPI() = default;
 
-		void Init(void* windowHandle) override;
+		void Init(void* windowHandle, Renderer::Info& info) override;
 		void Shutdown() override;
 
 		void SetClearColor(const glm::vec4& color) override;

@@ -15,6 +15,7 @@ namespace prime {
 
 	Renderer::API Renderer::s_API;
 	Renderer::Config Renderer::s_config;
+	Renderer::Info Renderer::s_info;
 
 	static RendererAPI* s_rendererAPI = nullptr;
 	static void* s_windowHandle = nullptr;
@@ -97,7 +98,7 @@ namespace prime {
 	{
 		s_windowHandle = windowHandle;
 		s_rendererAPI = CreateAPI();
-		s_rendererAPI->Init(windowHandle);
+		s_rendererAPI->Init(windowHandle, s_info);
 	}
 
 	void Renderer::Shutdown()

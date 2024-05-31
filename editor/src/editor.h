@@ -4,6 +4,7 @@
 #include "panels/scene_hierarchy.h"
 #include "panels/properties.h"
 #include "panels/content_browser.h"
+#include "panels/renderer_panel.h"
 
 namespace prime {
 
@@ -59,6 +60,7 @@ namespace prime {
 		SceneHeirarchy m_sceneHeirarchy;
 		Properties m_properties;
 		ContentBrowser m_contextBrowser;
+		RendererPanel m_rendererPanel;
 
 		b8 m_viewportFocused = false, m_viewportHovered = false;
 		glm::vec2 m_viewportBounds[2]{};
