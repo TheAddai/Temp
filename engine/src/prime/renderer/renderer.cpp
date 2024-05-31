@@ -88,6 +88,11 @@ namespace prime {
 		s_rendererAPI->EndDrawing();
 	}
 
+	Ref<Texture> Renderer::GetDefaultTexture()
+	{
+		return s_rendererAPI->GetDefaultTexture();
+	}
+
 	void Renderer::Init(void* windowHandle)
 	{
 		s_windowHandle = windowHandle;

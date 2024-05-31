@@ -22,6 +22,8 @@ namespace prime {
 		void EndDrawing() override;
 		void SetViewport(ui32 width, ui32 height) override;
 
+		Ref<Texture> GetDefaultTexture();
+
 		// Primitives
 		void DrawQuad(Ref<Texture>& texture, const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation) override;
 		void DrawLine(const glm::vec2& point, const glm::vec2& point2, const glm::vec4& color) override;

@@ -282,6 +282,11 @@ namespace prime {
 		glViewport(0, 0, width, height);
 	}
 
+	Ref<Texture> GLRendererAPI::GetDefaultTexture()
+	{
+		return s_data.textureSlots[0];
+	}
+
 	void GLRendererAPI::DrawQuad(Ref<Texture>& texture, const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, f32 rotation)
 	{
 		if (s_data.spriteIndexCount >= s_data.maxIndices)

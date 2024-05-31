@@ -2,9 +2,12 @@
 #include "properties.h"
 #include "prime/scene/components.h"
 #include "UI.h"
+#include "prime/renderer/renderer.h"
+#include "prime/core/resource_manager.h"
 
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <filesystem>
 
 namespace prime {
 
@@ -44,6 +47,44 @@ namespace prime {
 			DrawComponent<SpriteComponent>("Sprite", entity, true, [](auto& component)
 				{
 					ImGui::ColorPicker4("##SpriteColor", glm::value_ptr(component.color));
+					ui64 textureID = 0;
+					
+					if (component.texture.get())
+					{
+						textureID = component.texture->GetID();
+						ImGui::ImageButton((ImTextureID)textureID, { 20.0f, 20.0f }, { 0, 1 }, { 1, 0 });
+					}
+					else
+					{
+						textureID = Renderer::GetDefaultTexture()->GetID();
+						ImGui::ImageButton((ImTextureID)textureID, { 20.0f, 20.0f }, { 0, 1 }, { 1, 0 });
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							std::filesystem::path texturePath(path);
+							Ref<Texture> texture = ResourceManager::LoadTexture(texturePath.string());
+							if (texture.get())
+							{
+								component.texture = texture;
+							}
+							else 
+							{    P_ERROR("Could not load texture {0}", texturePath.filename().string()); }
+						}
+						ImGui::EndDragDropTarget();
+					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						if (ImGui::MenuItem("Remove Texture")) 
+						{ 
+							component.texture.reset();
+						}
+						ImGui::EndPopup();
+					}
 				});
 
 			DrawComponent<CameraComponent>("Camera", entity, true, [](auto& component)

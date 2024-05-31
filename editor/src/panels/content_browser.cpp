@@ -48,7 +48,7 @@ namespace prime {
 			ImGui::PushID(filenameString.c_str());
 			Ref<Texture> icon = directoryEntry.is_directory() ? m_folderIcon : m_fileIcon;
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			uint64_t textureID = icon->GetID();
+			ui64 textureID = icon->GetID();
 			ImGui::ImageButton((ImTextureID)textureID, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 
 			if (ImGui::BeginDragDropSource())

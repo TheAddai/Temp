@@ -3,6 +3,7 @@
 #include "prime/core/defines.h"
 #include "prime/core/ref.h"
 #include "prime/renderer/editor_camera.h"
+#include "texture.h"
 
 #include <glm/glm.hpp>
 
@@ -31,6 +32,8 @@ namespace prime {
 
 		static void DrawSceneRuntime(Ref<Scene>& scene);
 		static void DrawSceneEditor(Ref<Scene>& scene, EditorCamera& camera);
+
+		static Ref<Texture> GetDefaultTexture();
 
 		static API GetAPI() { return s_API; }
 		static Config GetConfig() { return s_config; }
