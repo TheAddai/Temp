@@ -16,15 +16,13 @@ namespace prime {
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_scene = Scene::Create();
 
-		// TEMP
-		Entity entity = m_scene->CreateEntity("Temp");
-		entity.AddComponent<SpriteComponent>().texture = ResourceManager::LoadTexture("assets/textures/blue.png");
-
 		m_frameBuffer = Framebuffer::Create(640, 480);
 		m_sceneHeirarchy.SetScene(m_scene);
 
 		Dispatcher::Get().sink<KeyPressedEvent>().connect<&Editor::OnKeyPressed>(this);
 		m_editorCamera.SubscribeToEvent();
+
+		m_contextBrowser.Init();
 	}
 
 	void Editor::Shutdown()
@@ -48,6 +46,7 @@ namespace prime {
 		Dockspace();
 		m_sceneHeirarchy.ImGuiRender();
 		m_properties.ImGuiRender(m_sceneHeirarchy.GetSelectedEntity());
+		m_contextBrowser.OnImGuiRender();
 		Viewport();
 	}
 	
@@ -98,11 +97,31 @@ namespace prime {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_viewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_viewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+		m_viewportFocused = ImGui::IsWindowFocused();
+		m_viewportHovered = ImGui::IsWindowHovered();
+
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 		uint64_t textureID = m_frameBuffer->GetTextureID();
 		ImGui::Image((ImTextureID)textureID, { m_viewportSize.x, m_viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		// accept draw
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(path);
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -232,6 +251,21 @@ namespace prime {
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
 			m_sceneSavePath = filepath;
+		}
+	}
+
+	void Editor::OpenScene(const std::filesystem::path& path)
+	{
+		Ref<Scene> newScene = Scene::Create();
+		if (FileSystem::LoadScene(newScene, path.string()))
+		{
+			std::string name = GetNameFromPath(path.string());
+			m_scene = newScene;
+			m_sceneHeirarchy.SetScene(m_scene, true);
+
+			std::string title = "Prime Engine - " + name;
+			Engine::SetTitle(title);
+			m_sceneSavePath = path.string();
 		}
 	}
 	

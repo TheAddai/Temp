@@ -32,7 +32,6 @@ namespace prime {
 	{
 		//init
 		Logger::Init();
-		P_INFO("welcome to prime engine");
 
 		Game::Config gameConfig = game->GetConfig();
 		s_platform.Init(gameConfig.title, gameConfig.width, gameConfig.height, gameConfig.fullScreen);
