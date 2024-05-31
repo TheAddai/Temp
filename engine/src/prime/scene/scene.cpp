@@ -63,6 +63,20 @@ namespace prime {
 		return newEntity;
 	}
 
+	Entity Scene::GetMainCamera()
+	{
+		entt::basic_view cEs = m_registry.view<CameraComponent>();
+		for (entt::entity cE : cEs)
+		{
+			auto camera = cEs.get<CameraComponent>(cE);
+			if (camera.primary)
+			{
+				return Entity(cE, this);
+			}
+		}
+		return Entity();
+	}
+
 	Ref<Scene> Scene::Create()
 	{
 		return CreateRef<Scene>();

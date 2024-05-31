@@ -46,18 +46,21 @@ namespace prime {
 		Ref<Texture> texture;
 	};
 
-	struct CameraComponent
+	class CameraComponent
 	{
+	public:
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 
 	public:
 		b8 primary = false;
 		Camera camera;
+		glm::vec4 clearColor = { 0.1f, 0.1f, 0.8f, 1.0f };
 	};
 
-	struct NameComponent
+	class NameComponent
 	{
+	public:
 		std::string name;
 
 		NameComponent() = default;

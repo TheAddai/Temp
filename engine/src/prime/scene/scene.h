@@ -23,6 +23,8 @@ namespace prime {
 		void DestroyEntity(Entity& entity);
 		Entity DuplicateEntity(Entity entity);
 
+		Entity GetMainCamera();
+
 		static Ref<Scene> Create();
 
 	private:

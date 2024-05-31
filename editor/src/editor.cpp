@@ -38,12 +38,12 @@ namespace prime {
 	{
 		ResizeViewport();
 		m_frameBuffer->Bind();
-		Renderer::Clear();
-
 		switch (m_state)
 		{
 		case State::edit:
 		{
+			Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+			Renderer::Clear();
 			m_editorCamera.Update();
 			Renderer::DrawSceneEditor(m_editorScene, m_editorCamera);
 			break;
@@ -51,6 +51,13 @@ namespace prime {
 		case State::play:
 		{
 			// Copy editor scene to active scene
+			glm::vec4 clearColor = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+			Entity camera = m_editorScene->GetMainCamera();
+			if (camera) { clearColor = camera.GetComponent<CameraComponent>().clearColor; }
+
+			Renderer::SetClearColor(clearColor);
+			Renderer::Clear();
+
 			Renderer::DrawSceneRuntime(m_editorScene);
 			break;
 		}

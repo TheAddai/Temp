@@ -89,6 +89,8 @@ namespace prime {
 
 			DrawComponent<CameraComponent>("Camera", entity, true, [](auto& component)
 				{
+					ImGui::ColorPicker4("##CameraColor", glm::value_ptr(component.clearColor));
+
 					Camera& camera = component.camera;
 					ImGui::Checkbox("Primary", &component.primary);
 
