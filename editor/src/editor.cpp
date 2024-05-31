@@ -14,30 +14,49 @@ namespace prime {
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/roboto_regular.ttf", fontSize);
 
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
-		m_scene = Scene::Create();
+		m_editorScene = Scene::Create();
+		m_scene = m_editorScene;
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
-		m_sceneHeirarchy.SetScene(m_scene);
+		m_sceneHeirarchy.SetScene(m_editorScene);
 
 		Dispatcher::Get().sink<KeyPressedEvent>().connect<&Editor::OnKeyPressed>(this);
 		m_editorCamera.SubscribeToEvent();
 
 		m_contextBrowser.Init();
+
+		m_playButton = ResourceManager::LoadTexture("resources/play_button.png");
+		m_stopButton = ResourceManager::LoadTexture("resources/stop_button.png");
 	}
 
 	void Editor::Shutdown()
 	{
-		m_scene->Destroy();
+		
 	}
 
 	void Editor::Update()
 	{
 		ResizeViewport();
-
-		m_editorCamera.Update();
-
 		m_frameBuffer->Bind();
-		Renderer::DrawSceneEditor(m_scene, m_editorCamera);
+		Renderer::Clear();
+
+		switch (m_state)
+		{
+		case State::edit:
+		{
+			m_editorCamera.Update();
+			Renderer::DrawSceneEditor(m_editorScene, m_editorCamera);
+			break;
+		}
+		case State::play:
+		{
+			// Copy editor scene to active scene
+			Renderer::DrawSceneRuntime(m_editorScene);
+			break;
+		}
+
+		}
+
 		m_frameBuffer->Unbind();
 	}
 
@@ -48,6 +67,7 @@ namespace prime {
 		m_properties.ImGuiRender(m_sceneHeirarchy.GetSelectedEntity());
 		m_contextBrowser.OnImGuiRender();
 		m_rendererPanel.ImGuiRender();
+		DrawPlayAndStopButton();
 		Viewport();
 	}
 	
@@ -246,8 +266,8 @@ namespace prime {
 		if (FileSystem::LoadScene(newScene, filepath))
 		{
 			std::string name = GetNameFromPath(filepath);
-			m_scene = newScene;
-			m_sceneHeirarchy.SetScene(m_scene, true);
+			m_editorScene = newScene;
+			m_sceneHeirarchy.SetScene(m_editorScene, true);
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -261,8 +281,8 @@ namespace prime {
 		if (FileSystem::LoadScene(newScene, path.string()))
 		{
 			std::string name = GetNameFromPath(path.string());
-			m_scene = newScene;
-			m_sceneHeirarchy.SetScene(m_scene, true);
+			m_editorScene = newScene;
+			m_sceneHeirarchy.SetScene(m_editorScene, true);
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -272,8 +292,8 @@ namespace prime {
 	
 	void Editor::NewScene()
 	{
-		m_scene = Scene::Create();
-		m_sceneHeirarchy.SetScene(m_scene);
+		m_editorScene = Scene::Create();
+		m_sceneHeirarchy.SetScene(m_editorScene);
 		m_sceneSavePath = "";
 		Engine::SetTitle("Prime Engine - Untitled");
 	}
@@ -283,7 +303,7 @@ namespace prime {
 		if (!m_sceneSavePath.empty())
 		{
 			std::string name = GetNameFromPath(m_sceneSavePath);
-			FileSystem::SaveScene(m_scene, m_sceneSavePath, name);
+			FileSystem::SaveScene(m_editorScene, m_sceneSavePath, name);
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
 		}
@@ -335,5 +355,58 @@ namespace prime {
 		}
 
 		}
+	}
+	
+	void Editor::DrawPlayAndStopButton()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar;
+		flags |= ImGuiWindowFlags_NoScrollWithMouse;
+
+		ImGui::Begin("##toolbar", nullptr, flags);
+		ImVec4 bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+		ImVec4 tintColor = ImVec4(1, 1, 1, 1);
+
+		f32 size = ImGui::GetWindowHeight() - 4.0f;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		b8 hasPlayButton = m_state == State::edit || m_state == State::play;
+		if (hasPlayButton)
+		{
+			ImTextureID textureID = 0;
+			if (m_state == State::edit) { textureID = (ImTextureID)(ui64)m_playButton->GetID(); }
+
+			if (m_state == State::play) { textureID = (ImTextureID)(ui64)m_stopButton->GetID(); }
+			if (ImGui::ImageButton(textureID, { size, size }, ImVec2(0, 0), ImVec2(1, 1), 0, bgColor, tintColor))
+			{
+				if (m_state == State::edit) { ScenePlay(); }
+				else if (m_state == State::play) { SceneEdit(); }
+			}
+		}
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
+	}
+
+	void Editor::SceneEdit()
+	{
+		m_state = State::edit;
+		m_sceneHeirarchy.SetScene(m_editorScene);
+	}
+
+	void Editor::ScenePlay()
+	{
+		m_state = State::play;
+		m_sceneHeirarchy.SetScene(m_editorScene);
 	}
 }

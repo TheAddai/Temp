@@ -1,0 +1,32 @@
+Scene: textures
+Entities:
+  - Entity: 15007134988482005368
+    NameComponent:
+      Name: Orange
+    TransformComponent:
+      Position: [4, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [1, 1, 1, 1]
+      TexturePath: assets\textures\orange.png
+  - Entity: 18109594509131272123
+    NameComponent:
+      Name: Green
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [1, 1, 1, 1]
+      TexturePath: assets\textures\green.png
+  - Entity: 13897102232538258543
+    NameComponent:
+      Name: Blue
+    TransformComponent:
+      Position: [-4, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteComponent:
+      Color: [1, 1, 1, 1]
+      TexturePath: assets\textures\blue.png

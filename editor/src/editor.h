@@ -48,8 +48,15 @@ namespace prime {
 		void OnKeyPressed(const KeyPressedEvent& e);
 		void SetShourcus(Key key);
 
+		void DrawPlayAndStopButton();
+
+		void SceneEdit();
+		void ScenePlay();
+
 	private:
 		Ref<Scene> m_scene;
+		Ref<Scene> m_editorScene;
+
 		Ref<Framebuffer> m_frameBuffer;
 		glm::vec2 m_viewportSize = glm::vec2(0.0f);
 		std::string m_sceneSavePath = "";
@@ -64,5 +71,16 @@ namespace prime {
 
 		b8 m_viewportFocused = false, m_viewportHovered = false;
 		glm::vec2 m_viewportBounds[2]{};
+
+		// textures
+		Ref<Texture> m_playButton;
+		Ref<Texture> m_stopButton;
+
+		enum class State
+		{
+			edit = 0, play = 1
+		};
+
+		State m_state = State::edit;
 	};
 }

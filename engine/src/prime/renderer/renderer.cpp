@@ -115,8 +115,6 @@ namespace prime {
 	
 	void Renderer::Draw(Ref<Scene>& scene)
 	{
-		s_rendererAPI->Clear();
-
 		// sprites
 		entt::basic_view sEs = scene->m_registry.view<TransformComponent, SpriteComponent>();
 		for (entt::entity sE : sEs)

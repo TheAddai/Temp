@@ -15,8 +15,7 @@ namespace prime {
 	{
 	public:
 		Scene() = default;
-
-		void Destroy();
+		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithGuid(Guid guid, const std::string& name);

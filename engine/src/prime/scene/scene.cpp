@@ -16,7 +16,7 @@ namespace prime {
 		}
 	}
 
-	void Scene::Destroy()
+	Scene::~Scene()
 	{
 		entt::basic_view entities = m_registry.view<TransformComponent>();
 		for (entt::entity entity : entities)

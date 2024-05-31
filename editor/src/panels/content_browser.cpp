@@ -13,8 +13,8 @@ namespace prime {
 		m_baseDirectory = "assets";
 		m_currentDirectory = m_baseDirectory;
 
-		m_fileIcon = ResourceManager::LoadTexture("resources/file.png");
-		m_folderIcon = ResourceManager::LoadTexture("resources/folder.png");
+		m_fileIcon = ResourceManager::LoadTexture("resources/file_icon.png");
+		m_folderIcon = ResourceManager::LoadTexture("resources/folder_icon.png");
 	}
 
 	void ContentBrowser::OnImGuiRender()
