@@ -30,3 +30,4 @@
 #include "scene/components.h"
 #include "scene/entity.h"
 #include "scene/scene.h"
+#include "scene/physics.h"

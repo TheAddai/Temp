@@ -128,6 +128,25 @@ namespace prime {
 		return out;
 	}
 
+	static std::string RigidBody2DBodyTypeToString(BodyType bodyType)
+	{
+		switch (bodyType)
+		{
+		case BodyType::Static:    return "Static"; break;
+		case BodyType::Dynamic:   return "Dynamic"; break;
+		case BodyType::Kinematic: return "Kinematic"; break;
+		}
+		return {};
+	}
+
+	static BodyType RigidBody2DBodyTypeFromString(const std::string& bodyTypeString)
+	{
+		if (bodyTypeString == "Static") { return BodyType::Static; }
+		if (bodyTypeString == "Dynamic") { return BodyType::Dynamic; }
+		if (bodyTypeString == "Kinematic") { return BodyType::Kinematic; }
+		return BodyType::Static;
+	}
+
 	static void SaveEntity(YAML::Emitter& out, Entity entity)
 	{
 		P_ASSERT(entity.HasComponent<IDComponent>());
@@ -222,6 +241,36 @@ namespace prime {
 			out << YAML::EndMap; // RectComponent
 		}
 
+		// rigidbody
+		if (entity.HasComponent<RigidbodyComponent>())
+		{
+			out << YAML::Key << "RigidbodyComponent";
+			out << YAML::BeginMap; // RigidbodyComponent
+
+			auto& rb2dComponent = entity.GetComponent<RigidbodyComponent>();
+			out << YAML::Key << "BodyType" << YAML::Value << RigidBody2DBodyTypeToString(rb2dComponent.type);
+			out << YAML::Key << "FixedRotation" << YAML::Value << rb2dComponent.fixedRotation;
+			out << YAML::Key << "Density" << YAML::Value << rb2dComponent.density;
+			out << YAML::Key << "Friction" << YAML::Value << rb2dComponent.friction;
+			out << YAML::Key << "Restitution" << YAML::Value << rb2dComponent.restitution;
+			out << YAML::Key << "RestitutionThreshold" << YAML::Value << rb2dComponent.restitutionThreshold;
+
+			out << YAML::EndMap; // RigidbodyComponent
+		}
+
+		// box collider
+		if (entity.HasComponent<BoxColliderComponent>())
+		{
+			out << YAML::Key << "BoxColliderComponent";
+			out << YAML::BeginMap; // BoxColliderComponent
+
+			auto& bc2dComponent = entity.GetComponent<BoxColliderComponent>();
+			out << YAML::Key << "Offset" << YAML::Value << bc2dComponent.offset;
+			out << YAML::Key << "Size" << YAML::Value << bc2dComponent.size;
+
+			out << YAML::EndMap; // BoxColliderComponent
+		}
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -295,6 +344,28 @@ namespace prime {
 				{
 					auto& rc = deserializedEntity.AddComponent<RectComponent>();
 					rc.color = rectComponent["Color"].as<glm::vec4>();
+				}
+
+				auto rigidbodyComponent = entity["RigidbodyComponent"];
+				if (rigidbodyComponent)
+				{
+					auto& rb2d = deserializedEntity.AddComponent<RigidbodyComponent>();
+					rb2d.type = RigidBody2DBodyTypeFromString(rigidbodyComponent["BodyType"].as<std::string>());
+					rb2d.fixedRotation = rigidbodyComponent["FixedRotation"].as<bool>();
+					rb2d.density = rigidbodyComponent["Density"].as<float>();
+					rb2d.friction = rigidbodyComponent["Friction"].as<float>();
+					rb2d.restitution = rigidbodyComponent["Restitution"].as<float>();
+					rb2d.restitutionThreshold = rigidbodyComponent["RestitutionThreshold"].as<float>();
+				}
+
+				// BoxCollider Component
+				auto boxColliderComponent = entity["BoxColliderComponent"];
+				if (boxColliderComponent)
+				{
+					auto& bc2d = deserializedEntity.AddComponent<BoxColliderComponent>();
+					bc2d.offset = boxColliderComponent["Offset"].as<glm::vec2>();
+					bc2d.size = boxColliderComponent["Size"].as<glm::vec2>();
+					
 				}
 
 			}

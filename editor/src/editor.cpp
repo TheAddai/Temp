@@ -58,6 +58,7 @@ namespace prime {
 			Renderer::SetClearColor(clearColor);
 			Renderer::Clear();
 
+			m_world.Step(1.0f / 60.0f);
 			Renderer::DrawSceneRuntime(m_scene);
 			break;
 		}
@@ -410,6 +411,8 @@ namespace prime {
 
 	void Editor::SceneEdit()
 	{
+		m_world.Destroy();
+
 		m_state = State::edit;
 		m_scene = m_editorScene;
 		m_sceneHeirarchy.SetScene(m_scene);
@@ -420,5 +423,7 @@ namespace prime {
 		m_state = State::play;
 		m_scene = Scene::Copy(m_editorScene);
 		m_sceneHeirarchy.SetScene(m_scene);
+
+		m_world.SetScene(m_scene);
 	}
 }

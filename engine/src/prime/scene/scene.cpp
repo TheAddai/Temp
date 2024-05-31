@@ -100,6 +100,8 @@ namespace prime {
 		CopyComponent<CameraComponent>(newEntity, entity);
 		CopyComponent<RectComponent>(newEntity, entity);
 		CopyComponent<LineComponent>(newEntity, entity);
+		CopyComponent<RigidbodyComponent>(newEntity, entity);
+		CopyComponent<BoxColliderComponent>(newEntity, entity);
 
 		return newEntity;
 	}

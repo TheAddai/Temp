@@ -119,6 +119,43 @@ namespace prime {
 					ImGui::ColorPicker4("##RectColor", glm::value_ptr(component.color));
 				});
 
+			DrawComponent<RigidbodyComponent>("Rigidbody", entity, true, [](auto& component)
+				{
+					const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
+					const char* currentBodyTypeString = bodyTypeStrings[(int)component.type];
+					if (ImGui::BeginCombo("Body Type", currentBodyTypeString))
+					{
+						for (int i = 0; i < 3; i++)
+						{
+							//P_INFO(i);
+							bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
+							if (ImGui::Selectable(bodyTypeStrings[i], isSelected))
+							{
+								currentBodyTypeString = bodyTypeStrings[i];
+								component.type = (BodyType)i;
+							}
+
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+
+						ImGui::EndCombo();
+					}
+
+					ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+					ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
+
+					ImGui::Checkbox("Fixed Rotation", &component.fixedRotation);
+				});
+
+			DrawComponent<BoxColliderComponent>("BoxCollider", entity, true, [](auto& component)
+				{
+					ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+					ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+				});
+
 			DrawAddComponentButton();
 		}
 		ImGui::End();
@@ -152,6 +189,8 @@ namespace prime {
 			DisplayAddComponentEntry<CameraComponent>(m_selection, "Camera");
 			DisplayAddComponentEntry<LineComponent>(m_selection, "Line");
 			DisplayAddComponentEntry<RectComponent>(m_selection, "Rect");
+			DisplayAddComponentEntry<RigidbodyComponent>(m_selection, "Rigidbody");
+			DisplayAddComponentEntry<BoxColliderComponent>(m_selection, "BoxCollider");
 			ImGui::EndPopup();
 		}
 	}

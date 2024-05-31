@@ -22,14 +22,14 @@ namespace prime {
 		return b2_staticBody;
 	}
 
-	void PhysicsWorld::SetScene(Scene* scene)
+	void PhysicsWorld::SetScene(Ref<Scene>& scene)
 	{
 		b2World* world = new b2World({ 0.0f, -9.8f });
 
 		auto pEs = scene->m_registry.view<RigidbodyComponent>();
 		for (entt::entity entityID : pEs)
 		{
-			Entity entity = { entityID, scene };
+			Entity entity = { entityID, scene.get()};
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rb = entity.GetComponent<RigidbodyComponent>();
 
@@ -91,7 +91,7 @@ namespace prime {
 		auto pEs = m_scene->m_registry.view<RigidbodyComponent>();
 		for (entt::entity entityID : pEs)
 		{
-			Entity entity = { entityID, m_scene };
+			Entity entity = { entityID, m_scene.get()};
 			auto& transform = entity.GetComponent<TransformComponent>();
 			b2Body* body = (b2Body*)m_bodies[entity.GetComponent<IDComponent>().guid];
 

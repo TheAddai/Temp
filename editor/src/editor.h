@@ -82,5 +82,8 @@ namespace prime {
 		};
 
 		State m_state = State::edit;
+
+		// physics
+		PhysicsWorld m_world;
 	};
 }

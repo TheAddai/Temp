@@ -93,7 +93,7 @@ namespace prime {
 
 	enum class BodyType
 	{ 
-		Static = 0, Dynamic, Kinematic
+		Static = 0, Dynamic = 1, Kinematic = 2
 	};
 
 	class RigidbodyComponent
@@ -108,7 +108,7 @@ namespace prime {
 		f32 friction = 0.5f;
 		f32 restitution = 0.0f;
 		f32 restitutionThreshold = 0.5f;
-		b8 fixedRotation = true;
+		b8 fixedRotation = false;
 	};
 
 	class BoxColliderComponent
