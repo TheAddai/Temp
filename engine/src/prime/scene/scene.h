@@ -17,6 +17,8 @@ namespace prime {
 		Scene() = default;
 		~Scene();
 
+		static Ref<Scene> Scene::Copy(Ref<Scene> other);
+
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithGuid(Guid guid, const std::string& name);
 

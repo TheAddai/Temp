@@ -30,3 +30,16 @@ Entities:
     SpriteComponent:
       Color: [1, 1, 1, 1]
       TexturePath: assets\textures\blue.png
+  - Entity: 18059904686831656530
+    NameComponent:
+      Name: MainCamera
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    CameraComponent:
+      Camera:
+        Size: 10
+        Near: -1
+        Far: 1
+      Primary: true

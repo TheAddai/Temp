@@ -6,10 +6,8 @@
 
 namespace prime {
 
-	void SceneHeirarchy::SetScene(Ref<Scene>& scene, b8 loaded)
+	void SceneHeirarchy::SetScene(Ref<Scene>& scene)
 	{
-		m_sceneLoaded = loaded;
-		m_entities.clear();
 		m_scene = scene;
 		m_selectedEntity = {};
 	}
@@ -20,34 +18,12 @@ namespace prime {
 
 		if (m_scene)
 		{
-			m_entities.clear();
-
 			entt::basic_view entities = m_scene->m_registry.view<TransformComponent>();
 			for (entt::entity entityID : entities)
 			{
 				Entity entity{ entityID, m_scene.get()};
-				m_entities.push_back(entity);
-			}
-
-			if (m_sceneLoaded)
-			{
-				for (Entity entity : m_entities)
-				{
-					DrawEntityNode(entity);
-				}
-			}
-			else if (!m_sceneLoaded)
-			{
-				// draw entities in reverse
-			    for (auto it = m_entities.rbegin(); it != m_entities.rend(); ++it)
-			    {
-				    DrawEntityNode(*it);
-			    }
-			}
-
-			
-
-			
+				DrawEntityNode(entity);
+			}		
 
 			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 				m_selectedEntity = {};

@@ -45,20 +45,20 @@ namespace prime {
 			Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			Renderer::Clear();
 			m_editorCamera.Update();
-			Renderer::DrawSceneEditor(m_editorScene, m_editorCamera);
+			Renderer::DrawSceneEditor(m_scene, m_editorCamera);
 			break;
 		}
 		case State::play:
 		{
 			// Copy editor scene to active scene
 			glm::vec4 clearColor = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
-			Entity camera = m_editorScene->GetMainCamera();
+			Entity camera = m_scene->GetMainCamera();
 			if (camera) { clearColor = camera.GetComponent<CameraComponent>().clearColor; }
 
 			Renderer::SetClearColor(clearColor);
 			Renderer::Clear();
 
-			Renderer::DrawSceneRuntime(m_editorScene);
+			Renderer::DrawSceneRuntime(m_scene);
 			break;
 		}
 
@@ -274,7 +274,8 @@ namespace prime {
 		{
 			std::string name = GetNameFromPath(filepath);
 			m_editorScene = newScene;
-			m_sceneHeirarchy.SetScene(m_editorScene, true);
+			m_sceneHeirarchy.SetScene(m_editorScene);
+			m_scene = m_editorScene;
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -289,7 +290,8 @@ namespace prime {
 		{
 			std::string name = GetNameFromPath(path.string());
 			m_editorScene = newScene;
-			m_sceneHeirarchy.SetScene(m_editorScene, true);
+			m_sceneHeirarchy.SetScene(m_editorScene);
+			m_scene = m_editorScene;
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -301,6 +303,7 @@ namespace prime {
 	{
 		m_editorScene = Scene::Create();
 		m_sceneHeirarchy.SetScene(m_editorScene);
+		m_scene = m_editorScene;
 		m_sceneSavePath = "";
 		Engine::SetTitle("Prime Engine - Untitled");
 	}
@@ -310,7 +313,7 @@ namespace prime {
 		if (!m_sceneSavePath.empty())
 		{
 			std::string name = GetNameFromPath(m_sceneSavePath);
-			FileSystem::SaveScene(m_editorScene, m_sceneSavePath, name);
+			FileSystem::SaveScene(m_scene, m_sceneSavePath, name);
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
 		}
@@ -408,12 +411,14 @@ namespace prime {
 	void Editor::SceneEdit()
 	{
 		m_state = State::edit;
-		m_sceneHeirarchy.SetScene(m_editorScene);
+		m_scene = m_editorScene;
+		m_sceneHeirarchy.SetScene(m_scene);
 	}
 
 	void Editor::ScenePlay()
 	{
 		m_state = State::play;
-		m_sceneHeirarchy.SetScene(m_editorScene);
+		m_scene = Scene::Copy(m_editorScene);
+		m_sceneHeirarchy.SetScene(m_scene);
 	}
 }

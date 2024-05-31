@@ -1,23 +1,18 @@
 Scene: rect_example
 Entities:
-  - Entity: 4562455170747619920
+  - Entity: 7536240063042397444
     NameComponent:
-      Name: Blue
-    TransformComponent:
-      Position: [4, 0]
-      Rotation: 0
-      Scale: [1, 1]
-    RectComponent:
-      Color: [0.0833015442, 0, 1, 1]
-  - Entity: 4582298881582823788
-    NameComponent:
-      Name: Green
+      Name: Camera
     TransformComponent:
       Position: [0, 0]
       Rotation: 0
       Scale: [1, 1]
-    RectComponent:
-      Color: [0, 1, 0, 1]
+    CameraComponent:
+      Camera:
+        Size: 10
+        Near: -1
+        Far: 1
+      Primary: true
   - Entity: 2020873865833783795
     NameComponent:
       Name: Red
@@ -27,3 +22,21 @@ Entities:
       Scale: [1, 1]
     RectComponent:
       Color: [0.944444418, 0, 0, 1]
+  - Entity: 4582298881582823788
+    NameComponent:
+      Name: Green
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    RectComponent:
+      Color: [0, 1, 0, 1]
+  - Entity: 4562455170747619920
+    NameComponent:
+      Name: Blue
+    TransformComponent:
+      Position: [4, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    RectComponent:
+      Color: [0.0833015442, 0, 1, 1]
