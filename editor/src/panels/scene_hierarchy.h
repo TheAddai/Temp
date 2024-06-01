@@ -12,6 +12,7 @@ namespace prime {
 		void ImGuiRender();
 
 		Entity GetSelectedEntity() const { return m_selectedEntity; }
+		void SetSelectedEntity(Entity entity) { m_selectedEntity = entity; }
 
 	private:
 		void DrawEntityNode(Entity entity);

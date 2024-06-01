@@ -362,6 +362,27 @@ namespace prime {
 		}
 		s_data.lineVertexCount += 8;
 	}
+
+	void GLRendererAPI::DrawCollider(const glm::mat4& transform, const glm::vec4& color)
+	{
+		if (s_data.spriteIndexCount >= s_data.maxIndices)
+		{
+			Flush();
+			StartBatch();
+		}
+		glm::vec2 rectVertices[4]{};
+		for (size_t i = 0; i < 4; i++)
+			rectVertices[i] = transform * s_data.vertexPositions[i];
+
+		static ui32 index[8] = { 0, 1, 1, 2, 2, 3, 3, 0 };
+		for (size_t x = 0; x < 8; x++)
+		{
+			s_data.lineVertexBufferPtr->position = rectVertices[index[x]];
+			s_data.lineVertexBufferPtr->color = color;
+			s_data.lineVertexBufferPtr++;
+		}
+		s_data.lineVertexCount += 8;
+	}
 	
 	void GLRendererAPI::InitSpriteRendering()
 	{

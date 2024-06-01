@@ -1,10 +1,12 @@
 #pragma once
 
 #include "prime/prime.h"
+
 #include "panels/scene_hierarchy.h"
 #include "panels/properties.h"
 #include "panels/content_browser.h"
 #include "panels/renderer_panel.h"
+#include "panels/environment_panel.h"
 
 namespace prime {
 
@@ -49,9 +51,11 @@ namespace prime {
 		void SetShourcus(Key key);
 
 		void DrawPlayAndStopButton();
+		void DuplicateEntity();
 
 		void SceneEdit();
 		void ScenePlay();
+
 
 	private:
 		Ref<Scene> m_scene;
@@ -68,6 +72,7 @@ namespace prime {
 		Properties m_properties;
 		ContentBrowser m_contextBrowser;
 		RendererPanel m_rendererPanel;
+		EnvironmentPanel m_environmentPanel;
 
 		b8 m_viewportFocused = false, m_viewportHovered = false;
 		glm::vec2 m_viewportBounds[2]{};

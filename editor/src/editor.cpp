@@ -16,6 +16,7 @@ namespace prime {
 		Renderer::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		m_editorScene = Scene::Create();
 		m_scene = m_editorScene;
+		m_environmentPanel.SetScene(m_scene);
 
 		m_frameBuffer = Framebuffer::Create(640, 480);
 		m_sceneHeirarchy.SetScene(m_editorScene);
@@ -46,6 +47,7 @@ namespace prime {
 			Renderer::Clear();
 			m_editorCamera.Update();
 			Renderer::DrawSceneEditor(m_scene, m_editorCamera);
+			m_environmentPanel.Update(m_editorCamera);
 			break;
 		}
 		case State::play:
@@ -75,6 +77,7 @@ namespace prime {
 		m_properties.ImGuiRender(m_sceneHeirarchy.GetSelectedEntity());
 		m_contextBrowser.OnImGuiRender();
 		m_rendererPanel.ImGuiRender();
+		m_environmentPanel.ImGuiRender();
 		DrawPlayAndStopButton();
 		Viewport();
 	}
@@ -277,6 +280,7 @@ namespace prime {
 			m_editorScene = newScene;
 			m_sceneHeirarchy.SetScene(m_editorScene);
 			m_scene = m_editorScene;
+			m_environmentPanel.SetScene(m_scene);
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -286,6 +290,8 @@ namespace prime {
 
 	void Editor::OpenScene(const std::filesystem::path& path)
 	{
+		if (m_state == State::play) { SceneEdit(); }
+
 		Ref<Scene> newScene = Scene::Create();
 		if (FileSystem::LoadScene(newScene, path.string()))
 		{
@@ -293,6 +299,7 @@ namespace prime {
 			m_editorScene = newScene;
 			m_sceneHeirarchy.SetScene(m_editorScene);
 			m_scene = m_editorScene;
+			m_environmentPanel.SetScene(m_scene);
 
 			std::string title = "Prime Engine - " + name;
 			Engine::SetTitle(title);
@@ -302,9 +309,12 @@ namespace prime {
 	
 	void Editor::NewScene()
 	{
+		if (m_state == State::play) { SceneEdit(); }
+
 		m_editorScene = Scene::Create();
 		m_sceneHeirarchy.SetScene(m_editorScene);
 		m_scene = m_editorScene;
+		m_environmentPanel.SetScene(m_scene);
 		m_sceneSavePath = "";
 		Engine::SetTitle("Prime Engine - Untitled");
 	}
@@ -361,7 +371,7 @@ namespace prime {
 
 		case Key::keyD:
 		{
-			if (control) { m_scene->DuplicateEntity(m_sceneHeirarchy.GetSelectedEntity()); }
+			if (control) { DuplicateEntity(); }
 			break;
 		}
 
@@ -407,6 +417,19 @@ namespace prime {
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
 		ImGui::End();
+	}
+
+	void Editor::DuplicateEntity()
+	{
+		if (m_state != State::edit)
+			return;
+
+		Entity selectedEntity = m_sceneHeirarchy.GetSelectedEntity();
+		if (selectedEntity)
+		{
+			Entity newEntity = m_scene->DuplicateEntity(selectedEntity);
+			m_sceneHeirarchy.SetSelectedEntity(newEntity);
+		}
 	}
 
 	void Editor::SceneEdit()

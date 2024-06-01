@@ -196,6 +196,7 @@ namespace prime {
 			out << YAML::Key << "Far" << YAML::Value << camera.GetFarClip();
 			out << YAML::EndMap; // Camera
 
+			out << YAML::Key << "Color" << YAML::Value << cameraComponent.clearColor;
 			out << YAML::Key << "Primary" << YAML::Value << cameraComponent.primary;
 
 			out << YAML::EndMap; // CameraComponent
@@ -312,6 +313,7 @@ namespace prime {
 					cc.camera.SetNearClip(cameraProps["Near"].as<float>());
 					cc.camera.SetFarClip(cameraProps["Far"].as<float>());
 
+					cc.clearColor = cameraComponent["Color"].as<glm::vec4>();
 					cc.primary = cameraComponent["Primary"].as<bool>();
 				}
 

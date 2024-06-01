@@ -1,17 +1,17 @@
 Scene: physics
 Entities:
-  - Entity: 2401720721004787745
+  - Entity: 1518371329551245954
     NameComponent:
       Name: Ground
     TransformComponent:
-      Position: [0, -2]
-      Rotation: -0.516617477
-      Scale: [9, 1]
+      Position: [0, -2.70000005]
+      Rotation: 0
+      Scale: [10, 1]
     SpriteComponent:
       Color: [1, 1, 1, 1]
     RigidbodyComponent:
       BodyType: Static
-      FixedRotation: true
+      FixedRotation: false
       Density: 1
       Friction: 0.5
       Restitution: 0
@@ -19,50 +19,33 @@ Entities:
     BoxColliderComponent:
       Offset: [0, 0]
       Size: [1, 1]
-  - Entity: 2948385002559916006
+  - Entity: 5554974095053759625
     NameComponent:
       Name: Camera
     TransformComponent:
-      Position: [0, -0.400000006]
+      Position: [0, 0]
       Rotation: 0
       Scale: [1, 1]
     CameraComponent:
       Camera:
-        Size: 20
+        Size: 10
         Near: -1
         Far: 1
+      Color: [0.709716797, 0.709719658, 0.890625, 1]
       Primary: true
-  - Entity: 14824332233998034657
+  - Entity: 350869889088727601
     NameComponent:
       Name: Sprite
     TransformComponent:
-      Position: [0, 1.70000005]
+      Position: [0, 2.4000001]
       Rotation: 0
       Scale: [1, 1]
     SpriteComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.972602725, 0.972593009, 0.972593009, 1]
+      TexturePath: assets\textures\blue.png
     RigidbodyComponent:
       BodyType: Dynamic
       FixedRotation: false
-      Density: 1
-      Friction: 1
-      Restitution: 0.5
-      RestitutionThreshold: 0.5
-    BoxColliderComponent:
-      Offset: [0, 0]
-      Size: [1, 1]
-  - Entity: 8681209862660283276
-    NameComponent:
-      Name: Ground2
-    TransformComponent:
-      Position: [8.10000038, -6.4000001]
-      Rotation: 0.647517145
-      Scale: [9, 1]
-    SpriteComponent:
-      Color: [1, 1, 1, 1]
-    RigidbodyComponent:
-      BodyType: Static
-      FixedRotation: true
       Density: 1
       Friction: 0.5
       Restitution: 0

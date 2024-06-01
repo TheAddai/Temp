@@ -15,9 +15,9 @@ namespace prime {
 	{
 		switch (type)
 		{
-		case BodyType::Static:    return b2_staticBody;
-		case BodyType::Dynamic:   return b2_dynamicBody;
-		case BodyType::Kinematic: return b2_kinematicBody;
+		case BodyType::Static:    return b2_staticBody; break;
+		case BodyType::Dynamic:   return b2_dynamicBody; break;
+		case BodyType::Kinematic: return b2_kinematicBody; break;
 		}
 		return b2_staticBody;
 	}

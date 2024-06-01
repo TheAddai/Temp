@@ -44,6 +44,8 @@ namespace prime {
 		static const Config GetConfig() { return s_config; }
 		static const Info GetInfo() { return s_info; }
 
+		static void DrawPhysicsColliders(Ref<Scene>& scene, EditorCamera& camera);
+
 	private:
 		static void Init(void* windowHandle);
 		static void Shutdown();

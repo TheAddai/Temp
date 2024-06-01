@@ -94,6 +94,29 @@ namespace prime {
 		return s_rendererAPI->GetDefaultTexture();
 	}
 
+	void Renderer::DrawPhysicsColliders(Ref<Scene>& scene, EditorCamera& camera)
+	{
+		s_rendererAPI->BeginDrawing(camera.GetViewProjectionMatrix());
+	
+		auto view = scene->m_registry.view<TransformComponent, BoxColliderComponent>();
+		for (auto entity : view)
+		{
+			auto [tc, bc2d] = view.get<TransformComponent, BoxColliderComponent>(entity);
+
+			glm::vec2 position = tc.position + bc2d.offset;
+			glm::vec2 scale = tc.scale * bc2d.size;
+
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(tc.position.x, tc.position.y, 0.0f))
+				* glm::rotate(glm::mat4(1.0f), tc.rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+				* glm::translate(glm::mat4(1.0f), glm::vec3(bc2d.offset, 0.001f))
+				* glm::scale(glm::mat4(1.0f), glm::vec3(scale.x, scale.y, 0.0f));
+
+			s_rendererAPI->DrawCollider(transform, { 0.0f, 1.0f,0.0f, 1.0f });
+		}
+
+		s_rendererAPI->EndDrawing();
+	}
+
 	void Renderer::Init(void* windowHandle)
 	{
 		s_windowHandle = windowHandle;

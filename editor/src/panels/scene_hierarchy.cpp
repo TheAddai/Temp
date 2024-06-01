@@ -79,6 +79,7 @@ namespace prime {
 		if (entityDuplicated)
 		{
 			m_scene->DuplicateEntity(entity);
+			m_selectedEntity = entity;
 		}
 	}
 }
